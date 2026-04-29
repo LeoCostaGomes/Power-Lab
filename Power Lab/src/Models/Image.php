@@ -1,4 +1,6 @@
 <?php
+    namespace App\Models;
+
     class Image
     {
         public function __construct(
