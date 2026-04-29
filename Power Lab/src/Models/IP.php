@@ -1,12 +1,12 @@
 <?php
-    namespace App;
+    namespace App\Models;
     
     class IP
     {   
         public function __construct(private string $IP)
         {
-            if (!filter_var($this->ip, FILTER_VALIDATE_IP)) {
-            throw new \InvalidArgumentException("O endereço IP '$this->ip' é inválido.");
+            if (!filter_var($this->IP, FILTER_VALIDATE_IP)) {
+            throw new \InvalidArgumentException("O endereço IP '$this->IP' é inválido.");
         }
         }
 
