@@ -3,6 +3,7 @@ namespace App\Models;
 
 use App\Models\IP;
 use App\Models\Email;
+use App\Models\ItemPoll;
 class User
 {
     public function __construct(
@@ -10,6 +11,7 @@ class User
         private string $password,
         private Email $email,
         private IP $ip,
+        private ItemPoll $pollVotedItem
     ) {
         $this->password = $this->setPassword($password);
     }
@@ -46,6 +48,28 @@ class User
         return password_hash($password, PASSWORD_DEFAULT);
     }
 
-    
+    public function compareIP(string $IP) : bool
+    {
+        return $this->comparePassword($IP);
+    }
+
+    public function compareEmail(Email $email) : bool
+    {
+        return $this->email->compareEmail($email);
+    }
+
+    public function userVotedInAnyItemPoll() : bool
+    {
+        if ($this->pollVotedItem != null)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public function setPollVotedItem(ItemPoll | null $pollVotedItem)
+    {
+        $this->pollVotedItem = $pollVotedItem;
+    }
 }
 ?>
