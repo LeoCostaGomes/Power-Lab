@@ -1,6 +1,7 @@
 <?php
 namespace App\Models;
 
+use App\Interfaces\ItemType;
 use App\Models\RewardBox;
 class RewardBoxWithVariableQuantity extends RewardBox
 {
