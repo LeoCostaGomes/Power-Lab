@@ -1,6 +1,7 @@
 <?php
 namespace App\Models;
 
+use App\Models\Image;
 class Particle{
     public function __construct(
         private string $name,
