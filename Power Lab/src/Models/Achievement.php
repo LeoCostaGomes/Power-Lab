@@ -10,7 +10,7 @@
         private string $objective,
         private Image $icon,
         private ItemType $reward,
-        private int $quantityReward
+        private int | null $quantityReward = null
         ) {
         }
 
@@ -34,7 +34,7 @@
             return $this->reward;
         }
 
-        public function getQuantityReward(): int
+        public function getQuantityReward(): int | null
         {
             return $this->quantityReward;
         }

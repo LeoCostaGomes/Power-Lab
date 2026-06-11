@@ -1,67 +1,49 @@
 <?php
     require __DIR__ . '/../autoload.php';
 
-    // Mocks rápidos para o funcionamento correto das interfaces se necessário
-    if (!interface_exists('App\Interfaces\ItemType')) {
-        header("Content-Type: text/plain; charset=utf-8");
-        die("Erro: A interface 'App\Interfaces\ItemType' não foi encontrada. Certifique-se de que o autoload está configurado ou crie a interface correspondente.");
-    }
-
-    use App\Models\Image;
-    use App\Models\Territory;
-    use App\Models\Skin;
-    use App\Models\Particle;
-    use App\Models\Paddle;
-    use App\Models\Ultimate;
-
-    // Novas classes de tipo de item
-    use App\Models\PongCoinsItemType;
-    use App\Models\ParticleItemType;
-    use App\Models\PaddleItemType;
-    use App\Models\UltimateItemType;
-    use App\Models\SkinItemType;
+    use App\Models\GameVersion;
+    use App\Models\GameMode;
 
     // =========================================================================
-    // 1. INSTÂNCIAS DE SUPORTE (Dependências básicas de Território e Imagem)
+    // 1. INSTÂNCIAS DE TESTE: VERSÕES DO JOGO (GameVersion)
     // =========================================================================
-    $territorioEsmeralda = new Territory("Território de Esmeralda");
-    $territorioVulcanico = new Territory("Território Vulcânico");
+    $versaoEstavel = new GameVersion(
+        "v1.2.0", 
+        "Adicionado suporte a novas skins, correção de bugs na colisão da raquete e otimização de performance no renderizador de partículas."
+    );
 
-    $redPng = base64_decode("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==");
-    $bluePng = base64_decode("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPj/HwADEwDN4M9ZOAAAAABJRU5ErkJggg==");
-    $gifAnimadoReal = base64_decode("R0lGODlhEAAQAPQAAP///wAAAPj4+Pq6uu7u7s7OzszMzMvLy8bGxsLCwsHBwb6+vrq6ujozMzczMzExMTAvLy8uLi4tLgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggVGhlIEdJTVAsIEdJRlMAMgAh+QQFMgAAACwAAAAAEAAQAAAFNyAgjmSJZmgalqZqui7AnvAsg7NID7e75xcMDmco9BCOgIDwAwySgIDgAwwSgIDgAwzSgIDgAwS6I0EAIfkEBTIAAAAsAAAAABAADwAABTYgII5kiWZoGpaXariuwC7Cs8wOhLsnGPwOCw6HwBACCBKBgOADDJKAgOADDNKAgOADBJIDQRAAIfkEBTIAAAAsAAAAABAADwAABTYgII5kiWZoGpaXariuwC7Cs8wOhLsnGPwOCw6HwBACCBKBgOADDJKAgOADDNKAgOADBJIDQRAAIfkEBTIAAAAsAAAAABAADwAABTYgII5kiWZoGpaXariuwC7Cs8wOhLsnGPwOCw6HwBACCBKBgOADDJKAgOADDNKAgOADBJIDQRAAIfkEBTIAAAAsAAAAABAADwAABTYgII5kiWZoGpaXariuwC7Cs8wOhLsnGPwOCw6HwBACCBKBgOADDJKAgOADDNKAgOADBJIDQRAAOf");
+    $versaoBeta = new GameVersion(
+        "v1.3.0-beta", 
+        "Fase de testes para o novo sistema de Ultimates globais e balanceamento do Território Vulcânico."
+    );
 
-    $spriteIcone = new Image($redPng, "image/png", "Ícone Ultimate Vermelho");
-    $spriteParticula = new Image($bluePng, "image/png", "Sprite da Partícula Azul");
-    $gifParticula = new Image($gifAnimadoReal, "image/gif", "GIF da Partícula Animado");
-
-    // =========================================================================
-    // 2. CRIAÇÃO DOS MODELOS BASE
-    // =========================================================================
-    $skinBasica = new Skin("Skin Cyberpunk 2077");
-    $particulaFogo = new Particle("Efeito de Chamas", $spriteParticula, $gifParticula);
-    
-    $descricoesPaddle = ["Estágio Inicial: Flutuação.", "Estágio Intermediário: Velocidade.", "Estágio Final: Propulsão."];
-    $paddleLendaria = new Paddle("Paddle Suprema", $descricoesPaddle, $territorioEsmeralda);
-    
-    $ultimateDestruicao = new Ultimate("Supernova Blaster", "Dispara um feixe de energia.", $spriteIcone, $territorioVulcanico);
+    $listaVersoes = [
+        "Produção / Estável" => $versaoEstavel,
+        "Ambiente Beta"      => $versaoBeta
+    ];
 
     // =========================================================================
-    // 3. CRIAÇÃO DOS REWARD ITEM TYPES (As novas classes a serem testadas)
+    // 2. INSTÂNCIAS DE TESTE: MODOS DE JOGO (GameMode)
     // =========================================================================
-    $itemPongCoins = new PongCoinsItemType();
-    $itemParticle  = new ParticleItemType($particulaFogo);
-    $itemPaddle    = new PaddleItemType($paddleLendaria);
-    $itemUltimate  = new UltimateItemType($ultimateDestruicao);
-    $itemSkin      = new SkinItemType($skinBasica);
+    $modoClassico = new GameMode(
+        "Clássico 1v1", 
+        "A experiência tradicional do Pong. Rebata a bola, use seus reflexos e vença ao marcar 11 pontos primeiro."
+    );
 
-    // Agrupando em uma lista para facilitar a exibição em loop no HTML
-    $listaDeRecompensas = [
-        "Pong Coins" => $itemPongCoins,
-        "Partícula"  => $itemParticle,
-        "Raquete"    => $itemPaddle,
-        "Ultimate"   => $itemUltimate,
-        "Skin"       => $itemSkin
+    $modoCaos = new GameMode(
+        "Caos Total", 
+        "Modo com multiplicadores de velocidade, ativação aleatória de Ultimates e modificações de gravidade na bola em tempo real."
+    );
+
+    $modoTerritorios = new GameMode(
+        "Disputa de Território", 
+        "Cada rebatida perfeita domina uma parte da arena. O jogador com maior área controlada ao fim do tempo vence."
+    );
+
+    $listaModos = [
+        "Casual"       => $modoClassico,
+        "Competitivo"  => $modoTerritorios,
+        "Especial"     => $modoCaos
     ];
 ?>
 
@@ -69,50 +51,63 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Teste das Classes de Recompensa (ItemType)</title>
+    <title>Teste das Classes GameVersion e GameMode</title>
     <style>
         body { font-family: sans-serif; background: #202124; color: #e8eaed; padding: 20px; }
-        .container { max-width: 900px; margin: 0 auto; }
+        .container { max-width: 950px; margin: 0 auto; }
         .section { background: #2d2f31; border-radius: 8px; padding: 15px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         h2 { color: #8ab4f8; border-bottom: 1px solid #3c4043; padding-bottom: 5px; margin-top: 0; }
         
-        /* Grid para alinhar os ItemTypes lado a lado */
-        .rewards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin-top: 15px; }
-        .reward-card { background: #3c4043; border: 1px solid #5f6368; border-radius: 6px; padding: 15px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
-        .reward-card h3 { margin: 0 0 10px 0; font-size: 14px; color: #f28b82; text-transform: uppercase; letter-spacing: 0.5px; }
-        .reward-card p { margin: 10px 0 0 0; font-weight: bold; font-size: 16px; color: #fff; }
+        /* Grid para o alinhamento dos cards */
+        .meta-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-top: 15px; }
+        .meta-card { background: #3c4043; border: 1px solid #5f6368; border-radius: 6px; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; }
         
-        .img-container img { 
-            width: 64px; 
-            height: 64px; 
-            border: 1px solid #5f6368; 
-            display: block; 
-            margin: 0 auto; 
-            background: #1a1a1a;
-            image-rendering: pixelated;
-            image-rendering: crisp-edges;
-        }
+        .meta-card h3 { margin: 0 0 10px 0; font-size: 13px; color: #f28b82; text-transform: uppercase; letter-spacing: 0.5px; }
+        .meta-badge { background: #1a1a1a; color: #8ab4f8; font-family: monospace; font-size: 16px; padding: 8px; text-align: center; border-radius: 4px; border: 1px solid #5f6368; margin-bottom: 10px; font-weight: bold; }
+        .meta-title { margin: 0 0 10px 0; font-size: 18px; color: #fff; font-weight: bold; text-align: center; }
+        .meta-desc { font-size: 13px; color: #bdc1c6; line-height: 1.4; }
+        
+        /* Cores exclusivas para diferenciar os blocos */
+        .mode-card-title { color: #81c995 !important; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>Painel de Teste: Tipos de Itens de Recompensa</h1>
-        <p style="color: #bdc1c6;">Este teste valida o comportamento das classes que implementam a interface <code>ItemType</code>.</p>
+        <h1>Painel de Teste: Metadados do Sistema do Jogo</h1>
+        <p style="color: #bdc1c6;">Este teste valida o comportamento das classes de infraestrutura <code>GameVersion</code> e <code>GameMode</code>.</p>
 
         <div class="section">
-            <h2>===== IMPLEMENTAÇÕES DE ITEMTYPE =====</h2>
-            
-            <div class="rewards-grid">
-                <?php foreach ($listaDeRecompensas as $categoria => $item): ?>
-                    <div class="reward-card">
-                        <h3><?= $categoria ?></h3>
-                        
-                        <div class="img-container">
-                            <img src="<?= $item->getRewardSprite()->getBase64Src() ?>" alt="Sprite da Recompensa">
+            <h2>===== VERSÕES DO SISTEMA (GAMEVERSION) =====</h2>
+            <div class="meta-grid">
+                <?php foreach ($listaVersoes as $ambiente => $versao): ?>
+                    <div class="meta-card">
+                        <div>
+                            <h3><?= $ambiente ?></h3>
+                            <div class="meta-badge"><?= $versao->getVersionCode() ?></div>
                         </div>
+                        <div>
+                            <p style="margin: 5px 0; font-size: 11px; color: #8ab4f8; font-weight: bold;">CHANGELOG:</p>
+                            <div class="meta-desc"><?= $versao->getChangelog() ?></div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
 
-                        <p><?= $item->getRewardText() ?></p>
+        <div class="section">
+            <h2>===== MODOS DE JOGO DISPONÍVEIS (GAMEMODE) =====</h2>
+            <div class="meta-grid">
+                <?php foreach ($listaModos as $categoria => $modo): ?>
+                    <div class="meta-card">
+                        <div>
+                            <h3>Fila: <?= $categoria ?></h3>
+                            <div class="meta-title mode-card-title"><?= $modo->getName() ?></div>
+                        </div>
+                        <div>
+                            <p style="margin: 5px 0; font-size: 11px; color: #81c995; font-weight: bold;">REGRAS / DESCRIÇÃO:</p>
+                            <div class="meta-desc"><?= $modo->getDescription() ?></div>
+                        </div>
                     </div>
                 <?php endforeach; ?>
             </div>
@@ -120,9 +115,8 @@
 
         <div class="section">
             <h2>===== VERIFICAÇÃO DE INTEGRIDADE DOS MODELOS =====</h2>
-            <p><strong>Nome do Modelo Skin:</strong> <?= $skinBasica->getName() ?></p>
-            <p><strong>Nome da Paddle Base:</strong> <?= $paddleLendaria->getName() ?> (<?= $paddleLendaria->getNameTerritory() ?>)</p>
-            <p><strong>Nome da Ultimate Base:</strong> <?= $ultimateDestruicao->getName() ?> (<?= $ultimateDestruicao->getNameTerritory() ?>)</p>
+            <p><strong>Método de Leitura GameVersion:</strong> Código de versão obtido via <code>getVersionCode()</code> com sucesso.</p>
+            <p><strong>Método de Leitura GameMode:</strong> Nome do modo obtido via <code>getName()</code> com sucesso.</p>
         </div>
     </div>
 
