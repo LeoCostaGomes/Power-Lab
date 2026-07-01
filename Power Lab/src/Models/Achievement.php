@@ -6,12 +6,18 @@
     class Achievement
     {
         public function __construct(
+        private int $id,
         private string $name,
         private string $objective,
         private Image $icon,
         private ItemType $reward,
         private int | null $quantityReward = null
         ) {
+        }
+
+        public function getId(): int
+        {
+            return $this->id;
         }
 
         public function getName(): string

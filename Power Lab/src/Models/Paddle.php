@@ -5,6 +5,7 @@ use App\Models\Territory;
 class Paddle
 {
     public function __construct(
+        private int $id,
         private string $name,
         /**
          * @var string[]
@@ -12,6 +13,11 @@ class Paddle
         private array $descriptionOfStages,
         private Territory $territoryBelonging,
     ) {
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
     }
 
     public function getName(): string

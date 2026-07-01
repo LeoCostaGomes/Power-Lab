@@ -5,6 +5,7 @@ use App\Models\RewardBox;
 class BoxType
 {
     public function __construct(
+        private int $id,
         private string $name,
         private Image $boxIcon,
         /**
@@ -12,6 +13,11 @@ class BoxType
         */
         private array $rewardBoxes
     ) {
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
     }
 
     public function getName(): string
