@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use DateTime;
@@ -7,13 +8,19 @@ use App\Models\ItemPoll;
 class Poll
 {
     public function __construct(
+        private int $id,
         private DateTime $startTime,
         private DateTime $finishTime,
         /**
-        * @var ItemPoll[]
-        */
+         * @var ItemPoll[]
+         */
         private array $itemPoll
     ) {
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
     }
 
     public function getStartTime(): DateTime
@@ -33,8 +40,9 @@ class Poll
 
     public function addItemInThisPoll(ItemPoll $itemInThisPoll): void
     {
-        if ($itemInThisPoll == null)
+        if ($itemInThisPoll == null) {
             throw new \InvalidArgumentException("item poll is null.");
+        }
         $this->itemPoll[] = $itemInThisPoll;
     }
 }
