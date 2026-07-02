@@ -1,0 +1,48 @@
+<?php
+    namespace App\Models;
+
+    use App\Interfaces\ItemType;
+
+    class Achievement
+    {
+        public function __construct(
+        private int $id,
+        private string $name,
+        private string $objective,
+        private Image $icon,
+        private ItemType $reward,
+        private int | null $quantityReward = null
+        ) {
+        }
+
+        public function getId(): int
+        {
+            return $this->id;
+        }
+
+        public function getName(): string
+        {
+            return $this->name;
+        }
+
+        public function getObjective(): string
+        {
+            return $this->objective;
+        }
+
+        public function getIcon(): Image
+        {
+            return $this->icon;
+        }
+
+        public function getReward(): ItemType
+        {
+            return $this->reward;
+        }
+
+        public function getQuantityReward(): int | null
+        {
+            return $this->quantityReward;
+        }
+    }
+?>
