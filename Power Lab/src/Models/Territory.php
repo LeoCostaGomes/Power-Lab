@@ -1,19 +1,26 @@
 <?php
-    namespace App\Models;
 
-    class Territory
+namespace App\Models;
+
+class Territory
+{
+    private int $id;
+    private string $name;
+
+    public function __construct(int $id, string $name)
     {
-        private string $name;
-
-        public function __construct(string $name)
-        {
-            $this->name = $name;
-        }
-        
-        public function getName() : string
-        {
-            return $this->name;
-        }
-
+        $this->id = $id;
+        $this->name = $name;
     }
-    ?>
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+}
+?>

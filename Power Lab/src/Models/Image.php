@@ -4,11 +4,17 @@
     class Image
     {
         public function __construct(
-            private string $name = "none",
+            private int $id,
             private string $data,
-            private string $mimeType
+            private string $mimeType,
+            private string $name = "none"
             ) { }
 
+
+        public function getId(): int
+        {
+            return $this->id;
+        }
 
         public function getBase64Src() : string
         {

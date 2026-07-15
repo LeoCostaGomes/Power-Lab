@@ -7,11 +7,17 @@
     class ItemPoll
     {
         public function __construct(
+            private int $id,
             private string $name,
             private string $description,
             private Image $conceptArt,
             private bool $securityToView,
             private User $userGaveIdeia) {
+        }
+
+        public function getId(): int
+        {
+            return $this->id;
         }
 
         public function getName(): string
@@ -34,7 +40,7 @@
             return $this->securityToView;
         }
 
-        public function getNameUserGaveIdeia()
+        public function getNameUserGaveIdeia() : string
         {
             return $this->userGaveIdeia->getName();
         }
