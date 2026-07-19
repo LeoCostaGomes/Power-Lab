@@ -24,4 +24,4 @@ spl_autoload_register(function ($class) {
 });
 
 // 2. CARREGA O .ENV (Uma única vez, agora que o autoload já sabe onde achar o EnvLoader)
-\App\Database\EnvLoader::load(__DIR__ . '/../.env');
+\App\Core\EnvLoader::load(__DIR__ . '/.env');

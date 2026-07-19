@@ -3,8 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Skin;
-use App\Database\DataBase;
-use App\Models\Image;
+use App\Core\DataBase;
 use PDO;
 
 class SkinRepository extends AbstractRepository
