@@ -21,21 +21,33 @@ class PaddleRepository extends AbstractRepository
 
     protected function load(): void
     {
-        $stmt = $this->db->query('SELECT * FROM paddles');
+        $stmt = $this->db->query('SELECT * FROM tb_paddle');
 
         foreach ($stmt->fetchAll() as $row) {
-            $territory = $this->territoryRepository->findById((int) $row['territory_id']);
+            $territory = $this->territoryRepository->findById((int) $row['fk_unlockable_in_territory']);
 
             if ($territory === null) {
                 throw new RuntimeException(
-                    "Territory {$row['territory_id']} não encontrado para o Paddle {$row['id']}."
+                    "Territory {$row['fk_unlockable_in_territory']} não encontrado para o Paddle {$row['id_paddle']}."
                 );
             }
 
+            // As descrições ainda estão sendo lançadas aos poucos: como as colunas
+            // são NOT NULL, uma descrição que ainda não existe vem como '' (nunca null).
+            // Descartamos as vazias e reindexamos, assumindo que o "buraco" fica só
+            // no final (stage 4, 5...) e não no meio da sequência.
+            $descriptions = array_values(array_filter([
+                $row['description1'],
+                $row['description2'],
+                $row['description3'],
+                $row['description4'],
+                $row['description5'],
+            ], fn (string $description) => trim($description) !== ''));
+
             $paddle = new Paddle(
-                id: (int) $row['id'],
+                id: (int) $row['id_paddle'],
                 name: $row['name'],
-                descriptionOfStages: json_decode($row['description_of_stages'], true) ?? [],
+                descriptionOfStages: $descriptions,
                 territoryBelonging: $territory,
             );
 
