@@ -9,8 +9,22 @@ use App\Repositories\ParticleRepository;
 use App\Repositories\SkinRepository;
 use App\Repositories\PaddleSkinRepository;
 use App\Core\DataBase;
+use App\Models\Image;
 
-header('Content-Type: text/plain; charset=utf-8');
+header('Content-Type: text/html; charset=utf-8');
+
+function renderImage(Image $image, string $label): string
+{
+    $src = $image->getBase64Src();
+    $label = htmlspecialchars($label);
+
+    return "<div style=\"display:inline-block;margin:8px;text-align:center;font-family:monospace;font-size:12px;vertical-align:top;\">"
+        . "<img src=\"{$src}\" style=\"max-width:120px;max-height:120px;border:1px solid #ccc;display:block;margin:0 auto 4px;\">"
+        . $label
+        . "</div>";
+}
+
+echo "<pre>";
 
 $pdo = DataBase::getInstance();
 
@@ -58,8 +72,6 @@ try {
             echo "  Stage 1: (sem descrição ainda)\n";
         }
 
-        // Confirma que o cache em memória devolve a MESMA instância,
-        // não uma nova consulta ao banco
         $sameId = $firstPaddle->getId();
         $foundAgain = $paddleRepository->findById($sameId);
         echo "  findById({$sameId}) é a mesma instância do findAll()? "
@@ -80,4 +92,31 @@ try {
 } catch (\Throwable $e) {
     echo "\n== FALHOU ==\n";
     echo get_class($e) . ": " . $e->getMessage() . "\n";
+    echo "</pre>";
+    exit;
+}
+
+echo "</pre>";
+
+echo "<h2>Imagens carregadas</h2>";
+
+echo "<h3>Particles (sprite + gif)</h3>";
+$count = 0;
+foreach ($particleRepository->findAll() as $particle) {
+    echo renderImage($particle->getSprite(), "Particle #{$particle->getId()} sprite");
+    echo renderImage($particle->getGif(), "Particle #{$particle->getId()} gif");
+}
+
+echo "<h3>Ultimates (spriteIcon)</h3>";
+$count = 0;
+foreach ($ultimateRepository->findAll() as $ultimate) {
+    echo renderImage($ultimate->getSpriteIcon(), "Ultimate #{$ultimate->getId()}: {$ultimate->getName()}");
+}
+
+echo "<h3>Paddle + Skin</h3>";
+$count = 0;
+foreach ($paddleSkinRepository->findAll() as $paddleId => $skins) {
+    foreach ($skins as $skinId => $image) {
+        echo renderImage($image, "Paddle #{$paddleId} + Skin #{$skinId}");
+    }
 }
