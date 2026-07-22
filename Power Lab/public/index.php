@@ -60,32 +60,40 @@ try {
     echo "\n== Checando relações ==\n";
 
     $paddles = $paddleRepository->findAll();
-    $firstPaddle = reset($paddles) ?: null;
 
-    if ($firstPaddle !== null) {
-        echo "Paddle #{$firstPaddle->getId()}: {$firstPaddle->getName()}\n";
-        echo "  Territory: {$firstPaddle->getNameTerritory()}\n";
+    if ($paddles !== null) {
+    foreach ($paddles as $paddle) {
+        
+        echo "Paddle #{$paddle->getId()}: {$paddle->getName()}\n";
+        echo "  Territory: {$paddle->getNameTerritory()}\n";
 
-        try {
-            echo "  Stage 1: {$firstPaddle->getDescriptionOfStage(1)}\n";
-        } catch (\InvalidArgumentException $e) {
-            echo "  Stage 1: (sem descrição ainda)\n";
+        for ($stage = 1; $stage <= 5; $stage++) {
+            try {
+                echo "  Stage {$stage}: {$paddle->getDescriptionOfStage($stage)}\n";
+            } catch (\InvalidArgumentException $e) {
+                //echo "  Stage {$stage}: (sem descrição ainda)\n";
+            }
         }
 
-        $sameId = $firstPaddle->getId();
+        $sameId = $paddle->getId();
         $foundAgain = $paddleRepository->findById($sameId);
         echo "  findById({$sameId}) é a mesma instância do findAll()? "
-            . ($foundAgain === $firstPaddle ? 'sim' : 'NÃO') . "\n";
+            . ($foundAgain === $paddle ? 'sim' : 'NÃO') . "\n";
+    }
     } else {
         echo "Nenhum Paddle carregado — confira se tb_paddle tem linhas.\n";
     }
 
     $ultimates = $ultimateRepository->findAll();
-    $firstUltimate = reset($ultimates) ?: null;
 
-    if ($firstUltimate !== null) {
-        echo "Ultimate #{$firstUltimate->getId()}: {$firstUltimate->getName()}\n";
-        echo "  Territory: {$firstUltimate->getNameTerritory()}\n";
+    foreach ($ultimates as $ultimate) {
+        echo "Ultimate #{$ultimate->getId()}: {$ultimate->getName()}\n";
+        echo "  Territory: {$ultimate->getNameTerritory()}\n";
+
+        $sameId = $ultimate->getId();
+        $foundAgain = $ultimateRepository->findById($sameId);
+        echo "  findById({$sameId}) é a mesma instância do findAll()? "
+            . ($foundAgain === $ultimate ? 'sim' : 'NÃO') . "\n";
     }
 
     echo "\n== Tudo certo ==\n";
