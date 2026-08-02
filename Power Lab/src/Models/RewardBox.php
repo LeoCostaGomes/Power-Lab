@@ -8,7 +8,7 @@ class RewardBox
 {
     public function __construct(
         private int $id,
-        private ItemType $itemType,
+        private ItemCategory $itemCategory,
         private int $weightChance
     ) {
     }
@@ -18,9 +18,9 @@ class RewardBox
         return $this->id;
     }
 
-    public function getItemType(): ItemType
+    public function getItemType(): ItemCategory
     {
-        return $this->itemType;
+        return $this->itemCategory;
     }
 
     public function getWeightChance(): int

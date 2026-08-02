@@ -11,10 +11,10 @@ class RewardBoxWithVariableQuantity extends RewardBox
         int $id,
         private int $minQuantity,
         private int $maxQuantity,
-        ItemType $itemType,
+        ItemCategory $itemCategory,
         int $weightChance
     ) {
-        parent::__construct($id, $itemType, $weightChance);
+        parent::__construct($id, $itemCategory, $weightChance);
     }
 
     public function getMinQuantity(): int

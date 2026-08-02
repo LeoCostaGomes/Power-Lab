@@ -44,7 +44,7 @@ class BoxType
         $realChances = [];
         foreach ($this->rewardBoxes as $rewardBox) {
             $realChances[] = [
-                'itemType' => $rewardBox->getItemType(),
+                'itemType' => $rewardBox->getItemCategory(),
                 'realChance' => ($rewardBox->getWeightChance() / $totalWeight) * 100
             ];
         }

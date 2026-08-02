@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Interfaces\ItemType;
+
 class Stage
 {
     private int $id;
@@ -14,7 +16,8 @@ class Stage
     private Difficulty $difficulty;
     private Objective $objective;
     private int $objectiveQuantity;
-    private RewardStage $rewardStage;
+    private ItemType $rewardStage;
+    private int $rewardStageQuantity;
     private array $stageModifiers;
     private EnemyType $enemyType;
     private Territory $territoryOfThisStage;
@@ -30,7 +33,8 @@ class Stage
         Difficulty $difficulty,
         Objective $objective,
         int $objectiveQuantity,
-        RewardStage $rewardStage,
+        ItemType $rewardStage,
+        int $rewardStageQuantity,
         array $stageModifiers,
         EnemyType $enemyType,
         Territory $territoryOfThisStage
@@ -101,9 +105,14 @@ class Stage
         return $this->objectiveQuantity;
     }
 
-    public function getRewardStage(): RewardStage
+    public function getRewardStage(): ItemType
     {
         return $this->rewardStage;
+    }
+
+    public function getRewardStageQuantity() : int
+    {
+        return $this->rewardStageQuantity;
     }
 
     public function getModifiers(): array

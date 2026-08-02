@@ -5,8 +5,6 @@ require_once __DIR__ . '/../../autoloader.php';
 
 use App\Repositories\TerritoryRepository;
 use App\Repositories\PaddleRepository;
-use App\Repositories\UltimateRepository;
-use App\Repositories\ParticleRepository;
 use App\Repositories\SkinRepository;
 use App\Repositories\PaddleSkinRepository;
 use App\Core\DataBase;
@@ -46,12 +44,6 @@ try {
     $paddleRepository = new PaddleRepository($territoryRepository);
     echo "Paddle: " . count($paddleRepository->findAll()) . " carregados\n";
 
-    $ultimateRepository = new UltimateRepository($territoryRepository);
-    echo "Ultimate: " . count($ultimateRepository->findAll()) . " carregados\n";
-
-    $particleRepository = new ParticleRepository();
-    echo "Particle: " . count($particleRepository->findAll()) . " carregados\n";
-
     $skinRepository = new SkinRepository();
     echo "Skin: " . count($skinRepository->findAll()) . " carregados\n";
 
@@ -81,14 +73,6 @@ try {
         echo "Nenhum Paddle carregado — confira se tb_paddle tem linhas.\n";
     }
 
-    $ultimates = $ultimateRepository->findAll();
-    $firstUltimate = reset($ultimates) ?: null;
-
-    if ($firstUltimate !== null) {
-        echo "Ultimate #{$firstUltimate->getId()}: {$firstUltimate->getName()}\n";
-        echo "  Territory: {$firstUltimate->getNameTerritory()}\n";
-    }
-
     echo "\n== Tudo certo ==\n";
 } catch (\Throwable $e) {
     echo "\n== FALHOU ==\n";
@@ -100,19 +84,6 @@ try {
 echo "</pre>";
 
 echo "<h2>Imagens carregadas</h2>";
-
-echo "<h3>Particles (sprite + gif)</h3>";
-$count = 0;
-foreach ($particleRepository->findAll() as $particle) {
-    echo renderImage($particle->getSprite(), "Particle #{$particle->getId()} sprite");
-    echo renderImage($particle->getGif(), "Particle #{$particle->getId()} gif");
-}
-
-echo "<h3>Ultimates (spriteIcon)</h3>";
-$count = 0;
-foreach ($ultimateRepository->findAll() as $ultimate) {
-    echo renderImage($ultimate->getSpriteIcon(), "Ultimate #{$ultimate->getId()}: {$ultimate->getName()}");
-}
 
 $allPaddles = $paddleRepository->findAll();
 $allSkins = $skinRepository->findAll();
