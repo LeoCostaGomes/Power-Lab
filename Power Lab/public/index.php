@@ -1,5 +1,5 @@
 <?php
 
-require_once __DIR__ . '/../src/Tests/test1.php';
+require_once __DIR__ . '/../src/Tests/testPaddleSkin.php';
 
 ?>
