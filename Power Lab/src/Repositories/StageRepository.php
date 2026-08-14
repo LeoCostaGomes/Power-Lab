@@ -65,7 +65,7 @@ class StageRepository extends AbstractRepository
 
     private function processRewardType(string $rewardCode) : ItemType
     {
-        [$rewardType, $rewardId] = explode('/', $rewardCode);
+        
 
         
     }
