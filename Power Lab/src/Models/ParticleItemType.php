@@ -8,14 +8,8 @@ use App\Models\Particle;
 class ParticleItemType implements ItemType
 {
     public function __construct(
-        private int $id,
         private Particle $particle
     ) {
-    }
-
-    public function getId(): int
-    {
-        return $this->id;
     }
 
     public function getRewardText(): string

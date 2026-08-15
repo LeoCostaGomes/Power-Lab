@@ -8,14 +8,8 @@ use App\Models\Skin;
 class SkinItemType implements ItemType
 {
     public function __construct(
-        private int $id,
         private Skin $skin
     ) {
-    }
-
-    public function getId(): int
-    {
-        return $this->id;
     }
 
     public function getRewardText(): string

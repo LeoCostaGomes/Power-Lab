@@ -6,7 +6,6 @@ use App\Interfaces\ItemType;
 class BoxItemType implements ItemType
 {
     public function __construct(
-        private int $id,
         private BoxType $boxType
     ) {
     }

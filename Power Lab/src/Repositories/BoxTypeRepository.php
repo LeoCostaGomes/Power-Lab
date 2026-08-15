@@ -62,14 +62,14 @@ class BoxTypeRepository extends AbstractRepository
                 $rewards += $reward;
             }
 
-            $objective = new BoxType(
+            $boxType = new BoxType(
                 id: (int) $row['id_box_type'],
                 name: $row['name'],
                 boxIcon: new Image($row['box_icon'], $row['mime_type_image']),
                 rewardBoxes: $rewards
             );
 
-            $this->items[$objective->getId()] = $objective;
+            $this->items[$boxType->getId()] = $boxType;
         }
     }
 
