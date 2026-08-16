@@ -18,7 +18,7 @@ class RewardBox
         return $this->id;
     }
 
-    public function getItemType(): ItemCategory
+    public function getItemCategory(): ItemCategory
     {
         return $this->itemCategory;
     }

@@ -18,7 +18,7 @@ class ObjectiveRepository extends AbstractRepository
 
     protected function load(): void
     {
-        $stmt = $this->db->query('SELECT * FROM tb_difficulty');
+        $stmt = $this->db->query('SELECT * FROM tb_objective');
 
         foreach ($stmt->fetchAll() as $row) {
             $objective = new Objective(

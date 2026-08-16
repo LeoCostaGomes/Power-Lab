@@ -17,7 +17,7 @@ function renderImage(Image $image, string $label): string
     $label = htmlspecialchars($label);
 
     return "<div style=\"display:inline-block;margin:8px;text-align:center;font-family:monospace;font-size:12px;vertical-align:top;\">"
-        . "<img src=\"{$src}\" style=\"max-width:120px;max-height:120px;border:1px solid #ccc;display:block;margin:0 auto 4px;\">"
+        . "<img src=\"{$src}\" style=\"width:120px;height:120px;border:1px solid #ccc;display:block;margin:0 auto 4px;\">"
         . $label
         . "</div>";
 }
