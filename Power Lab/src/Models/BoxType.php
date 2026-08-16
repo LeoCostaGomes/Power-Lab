@@ -34,7 +34,7 @@ class BoxType
     {
         return $this->rewardBoxes;
     }
-
+    
     public function getRealChanceOfEachItem(): array
     {
         $totalWeight = array_reduce($this->rewardBoxes, function ($carry, $rewardBox) {
@@ -43,10 +43,20 @@ class BoxType
 
         $realChances = [];
         foreach ($this->rewardBoxes as $rewardBox) {
-            $realChances[] = [
-                'itemType' => $rewardBox->getItemCategory(),
-                'realChance' => ($rewardBox->getWeightChance() / $totalWeight) * 100
-            ];
+            if ($rewardBox instanceof RewardBoxWithVariableQuantity)
+                $realChances[] = [
+                    'itemCategory' => $rewardBox->getItemCategory(),
+                    'minQuantity' => $rewardBox->getMinQuantity(),
+                    'maxQuantity' => $rewardBox->getMaxQuantity(),
+                    'realChance' => ($rewardBox->getWeightChance() / $totalWeight) * 100
+                ];
+            else
+                $realChances[] = [
+                    'itemCategory' => $rewardBox->getItemCategory(),
+                    'realChance' => ($rewardBox->getWeightChance() / $totalWeight) * 100
+                ];{
+
+            }
         }
 
         return $realChances;

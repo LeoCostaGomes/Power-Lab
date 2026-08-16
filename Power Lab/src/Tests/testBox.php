@@ -18,7 +18,7 @@ function renderImage(Image $image, string $label): string
     $label = htmlspecialchars($label);
 
     return "<div style=\"display:inline-block;margin:8px;text-align:center;font-family:monospace;font-size:12px;vertical-align:top;\">"
-        . "<img src=\"{$src}\" style=\"max-width:120px;max-height:120px;border:1px solid #ccc;display:block;margin:0 auto 4px;\">"
+        . "<img src=\"{$src}\" style=\"width:120px;height:120px;border:1px solid #ccc;display:block;margin:0 auto 4px;\">"
         . $label
         . "</div>";
 }
@@ -59,15 +59,18 @@ try {
                     . " peso {$rewardBox->getWeightChance()})\n";
             } else {
                 echo "  - {$rewardBox->getItemCategory()->getName()}"
-                    . " (qtd 0-0, peso {$rewardBox->getWeightChance()})\n";
+                    . " (peso {$rewardBox->getWeightChance()})\n";
             }
         }
 
         echo "\n  Chance real de cada item:\n";
         foreach ($box->getRealChanceOfEachItem() as $chance) {
-            $nome = $chance['itemCategory']->getName();
-            $percentual = number_format($chance['realChance'], 2);
-            echo "  - {$nome}: {$percentual}%\n";
+            $nome = $chance["itemCategory"]->getName();
+            $percentual = number_format($chance["realChance"], 2);
+            if (isset($chance["minQuantity"]) && isset($chance["maxQuantity"]))
+                echo "  - {$nome} (qtd {$chance["minQuantity"]}-{$chance["maxQuantity"]}): {$percentual}%\n";
+            else
+                echo "  - {$nome}: {$percentual}%\n";
         }
         echo "\n";
     }
