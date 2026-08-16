@@ -7,13 +7,7 @@ use App\Interfaces\ItemType;
 class PongCoinsItemType implements ItemType
 {
     public function __construct(
-        private int $id
     ) {
-    }
-
-    public function getId(): int
-    {
-        return $this->id;
     }
 
     public function getRewardText(): string

@@ -18,6 +18,9 @@ class Stage
     private int $objectiveQuantity;
     private ItemType $rewardStage;
     private int $rewardStageQuantity;
+    /**
+    * @var (Modifier|null)[]
+    */
     private array $stageModifiers;
     private EnemyType $enemyType;
     private Territory $territoryOfThisStage;
@@ -35,6 +38,9 @@ class Stage
         int $objectiveQuantity,
         ItemType $rewardStage,
         int $rewardStageQuantity,
+        /**
+        * @var (Modifier|null)[]
+        */
         array $stageModifiers,
         EnemyType $enemyType,
         Territory $territoryOfThisStage
@@ -50,6 +56,7 @@ class Stage
         $this->objective = $objective;
         $this->objectiveQuantity = $objectiveQuantity;
         $this->rewardStage = $rewardStage;
+        $this->rewardStageQuantity = $rewardStageQuantity;
         $this->stageModifiers = $stageModifiers;
         $this->enemyType = $enemyType;
         $this->territoryOfThisStage = $territoryOfThisStage;

@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Core\DataBase;
+use App\Factories\ItemTypeFactory;
 use App\Models\Stage;
 use PDO;
 use RuntimeException;
@@ -18,8 +19,10 @@ class StageRepository extends AbstractRepository
     private DifficultyRepository $difficultyRepository;
     private ObjectiveRepository $objectiveRepository;
     private EnemyTypeRepository $enemyTypeRepository;
+    private ItemTypeFactory $itemTypeFactory;
+    private ModifierRepository $modifierRepository;
 
-    public function __construct(TerritoryRepository $territoryRepository, PaddleRepository $paddleRepository, UltimateRepository $ultimateRepository, SkinRepository $skinRepository, ParticleRepository $particleRepository, DifficultyRepository $difficultyRepository, ObjectiveRepository $objectiveRepository, EnemyTypeRepository $enemyTypeRepository)
+    public function __construct(TerritoryRepository $territoryRepository, PaddleRepository $paddleRepository, UltimateRepository $ultimateRepository, SkinRepository $skinRepository, ParticleRepository $particleRepository, DifficultyRepository $difficultyRepository, ObjectiveRepository $objectiveRepository, EnemyTypeRepository $enemyTypeRepository, ItemTypeFactory $itemTypeFactory, ModifierRepository $modifierRepository)
     {
         $this->db = DataBase::getInstance();
         $this->territoryRepository = $territoryRepository;
@@ -30,6 +33,8 @@ class StageRepository extends AbstractRepository
         $this->difficultyRepository = $difficultyRepository;
         $this->objectiveRepository = $objectiveRepository;
         $this->enemyTypeRepository = $enemyTypeRepository;
+        $this->itemTypeFactory = $itemTypeFactory;
+        $this->modifierRepository = $modifierRepository;
         parent::__construct();
     }
 
@@ -39,6 +44,12 @@ class StageRepository extends AbstractRepository
 
         foreach ($stmt->fetchAll() as $row) {
             $territory = $this->territoryRepository->findById((int) $row['fk_unlockable_in_territory']);
+
+            $modifiers = [
+                $row['fk_modifier1'] ? $this->modifierRepository->findById((int) $row['fk_modifier1']) : null,
+                $row['fk_modifier2'] ? $this->modifierRepository->findById((int) $row['fk_modifier2']) : null,
+                $row['fk_modifier3'] ? $this->modifierRepository->findById((int) $row['fk_modifier3']) : null
+            ];
 
             $this->verifyDependencies();
 
@@ -53,9 +64,10 @@ class StageRepository extends AbstractRepository
                 difficulty: $this->difficultyRepository->findById((int) $row['fk_difficulty']),
                 objective: $this->objectiveRepository->findById((int) $row['fk_objective']),
                 objectiveQuantity: $row['objective_quantity'],
-
+                rewardStage: $this->itemTypeFactory->createItemType($row['reward']),
+                rewardStageQuantity: $row['reward_quantity'],
+                stageModifiers: $modifiers,
                 enemyType: $this->enemyTypeRepository->findById((int) $row['fk_enemy_type']),
-
                 territoryOfThisStage: $territory,
             );
 
@@ -63,14 +75,7 @@ class StageRepository extends AbstractRepository
         }
     }
 
-    private function processRewardType(string $rewardCode) : ItemType
-    {
-        
-
-        
-    }
-
-    private function verifyDependencies() : void
+    private function verifyDependencies(): void
     {
         if ($this->territoryRepository === null) {
             throw new RuntimeException('TerritoryRepository não foi injetado no StageRepository.');
@@ -102,6 +107,14 @@ class StageRepository extends AbstractRepository
 
         if ($this->enemyTypeRepository === null) {
             throw new RuntimeException('EnemyTypeRepository não foi injetado no StageRepository.');
+        }
+
+        if ($this->itemTypeFactory === null) {
+            throw new RuntimeException('ItemTypeFactory não foi injetado no StageRepository.');
+        }
+
+        if ($this->modifierRepository === null) {
+            throw new RuntimeException('ModifierRepository não foi injetado no StageRepository.');
         }
     }
 

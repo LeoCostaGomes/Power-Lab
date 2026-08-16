@@ -5,6 +5,7 @@ use App\Interfaces\ItemType;
 use App\Models\BoxItemType;
 use App\Models\PaddleItemType;
 use App\Models\ParticleItemType;
+use App\Models\PongCoinsItemType;
 use App\Models\SkinItemType;
 use App\Models\UltimateItemType;
 use App\Repositories\BoxTypeRepository;
@@ -38,6 +39,7 @@ class ItemTypeFactory
     public function createItemType(string $rewardCode): ItemType
     {
         $item = $rewardCode;
+        $id = 0;
         if ($rewardCode !== "Pongcoin") {
             $parts = explode('/', $rewardCode);
 
@@ -70,6 +72,11 @@ class ItemTypeFactory
                 if ($this->boxTypeRepository === null) throw new Exception("boxTypeRepository é null");
                 return new BoxItemType($this->boxTypeRepository->findById($id));
                 break;
+            case "Pongcoin":
+                return new PongCoinsItemType();
+                break;
+            default:
+                throw new Exception("Tipo de item desconhecido: " . $type);
             
         }
     }

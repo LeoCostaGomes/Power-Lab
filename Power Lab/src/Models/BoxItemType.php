@@ -10,11 +10,6 @@ class BoxItemType implements ItemType
     ) {
     }
 
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
     public function getRewardText() : string
     {
         return $this->boxType->getName();
