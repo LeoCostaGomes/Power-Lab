@@ -19,6 +19,6 @@ class ParticleItemType implements ItemType
 
     public function getRewardSprite(): Image
     {
-        return $this->particle->getGif();
+        return $this->particle->getSprite();
     }
 }

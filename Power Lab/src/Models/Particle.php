@@ -9,8 +9,7 @@ class Particle
     public function __construct(
         private int $id,
         private string $name,
-        private Image $spriteParticle,
-        private Image $gifParticle,
+        private Image $spriteParticle
     ) {
     }
 
@@ -27,10 +26,5 @@ class Particle
     public function getSprite(): Image
     {
         return $this->spriteParticle;
-    }
-
-    public function getGif(): Image
-    {
-        return $this->gifParticle;
     }
 }

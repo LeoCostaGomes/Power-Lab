@@ -17,10 +17,10 @@ use Exception;
 
 class ItemTypeFactory
 {
-    private PaddleRepository $paddleRepository;
-    private UltimateRepository $ultimateRepository;
-    private SkinRepository $skinRepository;
-    private ParticleRepository $particleRepository;
+    private ?PaddleRepository $paddleRepository;
+    private ?UltimateRepository $ultimateRepository;
+    private ?SkinRepository $skinRepository;
+    private ?ParticleRepository $particleRepository;
     private BoxTypeRepository $boxTypeRepository;
     public function __construct(
         BoxTypeRepository $boxTypeRepository,

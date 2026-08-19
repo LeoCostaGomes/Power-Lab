@@ -26,7 +26,6 @@ class ParticleRepository extends AbstractRepository
                 id: (int) $row['id_particle'],
                 name: $row['name'],
                 spriteParticle: new Image($row['sprite_particle'], $row['mime_type_sprite']),
-                gifParticle: new Image($row['gif_particle'], $row['mime_type_gif']),
             );
 
             $this->items[$particle->getId()] = $particle;
