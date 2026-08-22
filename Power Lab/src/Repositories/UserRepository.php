@@ -38,7 +38,7 @@ class UserRepository extends AbstractWritableRepository
         $this->items[$user->getId()] = $user;
     }
 
-    private function instantiateUser(int $id, string $name, string $email, string $password, string $ip) : User
+    private function instantiateUser(int $id, string $name, string $email, string $password, string $ip): User
     {
         $email = new Email(
             email: $email
@@ -83,7 +83,8 @@ class UserRepository extends AbstractWritableRepository
 
         $stmt->bindValue(':name', $data->name);
         $stmt->bindValue(':email', $data->email);
-        $stmt->bindValue(':password', $data->password);
+        $hashedPassword = password_hash($data->password, PASSWORD_DEFAULT);
+        $stmt->bindValue(':password', $hashedPassword);
         $stmt->bindValue(':ip', $data->ip);
 
         if (!$stmt->execute()) {
@@ -110,12 +111,12 @@ class UserRepository extends AbstractWritableRepository
         $stmt = $this->db->prepare('UPDATE tb_user SET name = :name, email = :email, password = :password, ip = :ip WHERE id_user = :id');
         $stmt->bindValue(':name', $data->name);
         $stmt->bindValue(':email', $data->email);
-        $stmt->bindValue(':password', $data->password);
+        $hashedPassword = password_hash($data->password, PASSWORD_DEFAULT);
+        $stmt->bindValue(':password', $hashedPassword);
         $stmt->bindValue(':ip', $data->ip);
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
 
-        if (!$stmt->execute())
-        {
+        if (!$stmt->execute()) {
             return false;
         }
 
@@ -143,5 +144,3 @@ class UserRepository extends AbstractWritableRepository
         }
     }
 }
-
-?>
