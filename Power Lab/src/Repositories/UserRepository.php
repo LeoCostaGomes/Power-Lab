@@ -8,6 +8,8 @@ use App\Models\Email;
 use App\Models\IP;
 use App\Models\ItemPoll;
 use App\Models\User;
+use Exception;
+use Override;
 use PDO;
 
 class UserRepository extends AbstractWritableRepository
@@ -25,30 +27,35 @@ class UserRepository extends AbstractWritableRepository
         $stmt = $this->db->query('SELECT * FROM tb_user');
 
         foreach ($stmt->fetchAll() as $row) {
-            $this->addUser($row);
+            $this->addUser((int) $row['id_user'], $row['name'], $row['email'], $row['password'], $row['ip']);
         }
     }
 
-    private function addUser($row)
+    private function addUser(int $id, string $name, string $email, string $password, string $ip)
+    {
+        $user = $this->instantiateUser($id, $name, $email, $password, $ip);
+
+        $this->items[$user->getId()] = $user;
+    }
+
+    private function instantiateUser(int $id, string $name, string $email, string $password, string $ip) : User
     {
         $email = new Email(
-            email: $row['email']
+            email: $email
         );
 
         $ip = new IP(
-            IP: $row['ip']
+            IP: $ip
         );
 
-        $user = new User(
-            id: (int) $row['id_user'],
-            name: $row['name'],
+        return $user = new User(
+            id: $id,
+            name: $name,
             email: $email,
-            password: $row['password'],
+            password: $password,
             ip: $ip,
             pollVotedItem: null, //Se fizer a enquete tem que mudar essa lógica
         );
-
-        $this->items[$user->getId()] = $user;
     }
 
     public function findById(int $id): ?User
@@ -85,13 +92,11 @@ class UserRepository extends AbstractWritableRepository
 
         $id = (int) $this->db->lastInsertId();
 
-        $user = $this->findById($id);
+        $this->addUser($id, $data->name, $data->email, $data->password, $data->ip);
 
-        if ($user === null) {
+        if (!isset($this->items[$id])) {
             return false;
         }
-
-        $this->items[$user->getId()] = $user;
 
         return true;
     }
@@ -112,6 +117,29 @@ class UserRepository extends AbstractWritableRepository
         if (!$stmt->execute())
         {
             return false;
+        }
+
+        $updatedUser = $this->instantiateUser(
+            $id,
+            $data->name,
+            $data->email,
+            $data->password,
+            $data->ip
+        );
+
+        $this->items[$id] = $updatedUser;
+
+        return true;
+    }
+
+    #[Override]
+    public function deleteFromDatabase(int $id): void
+    {
+        $stmt = $this->db->prepare('DELETE FROM tb_user WHERE id_user = :id');
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+        if (!$stmt->execute()) {
+            throw new Exception("Não foi possível excluir este usuário do banco de dados.");
         }
     }
 }
