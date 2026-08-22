@@ -7,9 +7,9 @@ use App\Interfaces\WritableRepositoryInterface;
 
 abstract class AbstractWritableRepository extends AbstractRepository implements WritableRepositoryInterface
 {
-    abstract public function create(mixed $data): bool;
+    abstract public function create(object $data): bool;
 
-    abstract public function update(int $id, mixed $data): bool;
+    abstract public function update(int $id, object $data): bool;
 
     public function delete(int $id): bool
     {
