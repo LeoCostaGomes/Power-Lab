@@ -60,10 +60,10 @@ class User
 
     public function compareIP(string $IP): bool
     {
-        return $this->comparePassword($IP);
+        return $this->ip->compareIP($IP);
     }
 
-    public function compareEmail(Email $email): bool
+    public function compareEmail(String $email): bool
     {
         return $this->email->compareEmail($email);
     }

@@ -6,9 +6,9 @@ use App\Core\DataBase;
 use App\DTOs\UserDTO;
 use App\Models\Email;
 use App\Models\IP;
-use App\Models\ItemPoll;
 use App\Models\User;
 use Exception;
+use InvalidArgumentException;
 use Override;
 use PDO;
 
@@ -40,20 +40,20 @@ class UserRepository extends AbstractWritableRepository
 
     private function instantiateUser(int $id, string $name, string $email, string $password, string $ip): User
     {
-        $email = new Email(
+        $newEmail = new Email(
             email: $email
         );
 
-        $ip = new IP(
-            IP: $ip
+        $newIp = new IP(
+            $ip
         );
 
         return $user = new User(
             id: $id,
             name: $name,
-            email: $email,
+            email: $newEmail,
             password: $password,
-            ip: $ip,
+            ip: $newIp,
             pollVotedItem: null, //Se fizer a enquete tem que mudar essa lógica
         );
     }
@@ -61,6 +61,49 @@ class UserRepository extends AbstractWritableRepository
     public function findById(int $id): ?User
     {
         return parent::findById($id);
+    }
+
+    public function validateEmailAndIP(String $email, String $ip)
+    {
+        if ($this->emailExists($email)) throw new InvalidArgumentException("Este email já foi usado!");
+
+        //Adicionar verificação se IP ja existe no banco caso seja necessário
+
+        $this->validateEmail($email);
+
+        $this->validateIP($ip);
+    }
+
+    public function emailExists(String $email): bool
+    {
+        foreach ($this->items as $user) {
+            if ($user->compareEmail($email)) return true;
+        }
+        return false;
+    }
+
+    public function IPExists(String $ip): bool
+    {
+        foreach ($this->items as $user) {
+            if ($user->compareIP($ip)) return true;
+        }
+        return false;
+    }
+
+    public function validateEmail(String $email)
+    {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                throw new InvalidArgumentException(
+                    "Invalid email address: '{$email}'."
+                );
+            }
+    }
+
+    public function validateIP(String $ip)
+    {
+        if (!filter_var($ip, FILTER_VALIDATE_IP)) {
+                throw new InvalidArgumentException("invalide address IP: '$ip'.");
+            }
     }
 
     /**
@@ -76,6 +119,8 @@ class UserRepository extends AbstractWritableRepository
      */
     public function create(object $data): bool
     {
+        $this->validateEmailAndIP($data->email, $data->ip);
+
         $stmt = $this->db->prepare(
             'INSERT INTO tb_user (name, email, password, ip)
          VALUES (:name, :email, :password, :ip)'
@@ -93,7 +138,7 @@ class UserRepository extends AbstractWritableRepository
 
         $id = (int) $this->db->lastInsertId();
 
-        $this->addUser($id, $data->name, $data->email, $data->password, $data->ip);
+        $this->addUser($id, $data->name, $data->email, $hashedPassword, $data->ip);
 
         if (!isset($this->items[$id])) {
             return false;
@@ -108,6 +153,8 @@ class UserRepository extends AbstractWritableRepository
      */
     public function update(int $id, object $data): bool
     {
+        $this->validateEmailAndIP($data->email, $data->ip);
+
         $stmt = $this->db->prepare('UPDATE tb_user SET name = :name, email = :email, password = :password, ip = :ip WHERE id_user = :id');
         $stmt->bindValue(':name', $data->name);
         $stmt->bindValue(':email', $data->email);
@@ -124,7 +171,7 @@ class UserRepository extends AbstractWritableRepository
             $id,
             $data->name,
             $data->email,
-            $data->password,
+            $hashedPassword,
             $data->ip
         );
 

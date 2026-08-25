@@ -49,7 +49,7 @@ try {
 
                 if (
                     $usuario->compareEmail(
-                        new \App\Models\Email(email: $emailLogin)
+                        $emailLogin
                     )
                     &&
                     $usuario->comparePassword($senhaLogin)
@@ -63,13 +63,11 @@ try {
 
                 $mensagem = 'Login realizado com sucesso!';
                 $tipoMensagem = 'sucesso';
-
             } else {
 
                 $mensagem = 'Email ou senha incorretos.';
                 $tipoMensagem = 'erro';
             }
-
         } catch (Throwable $e) {
 
             $mensagem = 'Não foi possível realizar o login: ' . $e->getMessage();
@@ -96,41 +94,15 @@ try {
             );
 
             if ($repository->create($data)) {
-
                 $mensagem = 'Usuário criado com sucesso!';
                 $tipoMensagem = 'sucesso';
-
             } else {
-
                 $mensagem = 'Erro ao criar usuário.';
                 $tipoMensagem = 'erro';
             }
+        } catch (Exception $e) {
 
-        } catch (Throwable $e) {
-
-            $mensagem = 'Não foi possível criar o usuário.';
-
-            /*
-             * Verifica mensagens relacionadas à duplicidade.
-             */
-            $erro = strtolower($e->getMessage());
-
-            if (
-                str_contains($erro, 'email') ||
-                str_contains($erro, 'e-mail')
-            ) {
-
-                $mensagem = 'Este email já está cadastrado.';
-
-            } elseif (str_contains($erro, 'ip')) {
-
-                $mensagem = 'Este IP já está cadastrado.';
-
-            } else {
-
-                $mensagem = 'Erro ao criar usuário: ' . $e->getMessage();
-            }
-
+            $mensagem = $e->getMessage();
             $tipoMensagem = 'erro';
         }
     }
@@ -152,13 +124,11 @@ try {
 
                 $mensagem = 'Usuário encontrado!';
                 $tipoMensagem = 'sucesso';
-
             } else {
 
                 $mensagem = 'Usuário não encontrado.';
                 $tipoMensagem = 'erro';
             }
-
         } catch (Throwable $e) {
 
             $mensagem = 'Erro ao buscar usuário: ' . $e->getMessage();
@@ -190,13 +160,11 @@ try {
 
                 $mensagem = 'Usuário atualizado com sucesso!';
                 $tipoMensagem = 'sucesso';
-
             } else {
 
                 $mensagem = 'Erro ao atualizar usuário.';
                 $tipoMensagem = 'erro';
             }
-
         } catch (Throwable $e) {
 
             $erro = strtolower($e->getMessage());
@@ -207,11 +175,9 @@ try {
             ) {
 
                 $mensagem = 'Este email já está cadastrado.';
-
             } elseif (str_contains($erro, 'ip')) {
 
                 $mensagem = 'Este IP já está cadastrado.';
-
             } else {
 
                 $mensagem = 'Erro ao atualizar usuário: ' . $e->getMessage();
@@ -236,14 +202,12 @@ try {
 
             $mensagem = 'Usuário excluído com sucesso!';
             $tipoMensagem = 'sucesso';
-
         } catch (Throwable $e) {
 
             $mensagem = 'Erro ao excluir usuário: ' . $e->getMessage();
             $tipoMensagem = 'erro';
         }
     }
-
 } catch (Throwable $e) {
 
     $mensagem = 'Não foi possível carregar o UserRepository: ' . $e->getMessage();
@@ -328,22 +292,22 @@ try {
         }
 
         .mensagem {
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-}
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
 
-.mensagem.sucesso {
-    background: #dff0d8;
-    border: 1px solid #a3d69c;
-    color: #285b2a;
-}
+        .mensagem.sucesso {
+            background: #dff0d8;
+            border: 1px solid #a3d69c;
+            color: #285b2a;
+        }
 
-.mensagem.erro {
-    background: #f8d7da;
-    border: 1px solid #dc3545;
-    color: #842029;
-}
+        .mensagem.erro {
+            background: #f8d7da;
+            border: 1px solid #dc3545;
+            color: #842029;
+        }
     </style>
 
 </head>
@@ -591,13 +555,13 @@ try {
 
     <?php if ($mensagem !== ''): ?>
 
-    <div class="mensagem <?= $tipoMensagem ?>">
+        <div class="mensagem <?= $tipoMensagem ?>">
 
-        <?= htmlspecialchars($mensagem) ?>
+            <?= htmlspecialchars($mensagem) ?>
 
-    </div>
+        </div>
 
-<?php endif; ?>
+    <?php endif; ?>
 
 </body>
 
