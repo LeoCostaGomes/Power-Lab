@@ -1,2 +1,2 @@
-DROP DATABASE powerlab;
+DROP DATABASE IF EXISTS powerlab;
 CREATE DATABASE powerlab CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
