@@ -34,7 +34,24 @@ class Paddle
         return $description;
     }
 
-    public function getNameTerritory() : string
+    public function getAllDescriptions(): array
+    {
+        $result = [];
+
+        foreach ($this->descriptionOfStages as $stage => $description) {
+            if ($description === '') {
+                continue;
+            }
+
+            $result[$stage + 1] = $description;
+        }
+
+        return $result;
+    }
+
+
+
+    public function getNameTerritory(): string
     {
         return $this->territoryBelonging->getName();
     }

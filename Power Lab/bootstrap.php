@@ -1,6 +1,8 @@
 <?php
 
 use App\Controllers\PaddleController;
+use App\Controllers\ParticleController;
+use App\Controllers\UltimateController;
 use App\Repositories\TerritoryRepository;
 use App\Repositories\PaddleRepository;
 use App\Repositories\UltimateRepository;
@@ -62,12 +64,20 @@ $stageRepository = new StageRepository(
 
 // ---- Controllers, já com as Repositories que cada um precisa ----
 $paddleController = new PaddleController($paddleRepository);
+$ultimateController = new UltimateController($ultimateRepository);
+$particleController = new ParticleController($particleRepository);
 
 // ---- Rotas ----
 $router = new Router();
 
-$router->get('/paddles', [$paddleController, 'index']);
-$router->get('/paddles/{id}', [$paddleController, 'show']);
+$router->get('/paddles', [$paddleController, 'getAll']);
+$router->get('/paddles/{id}', [$paddleController, 'getById']);
+
+$router->get('/ultimates', [$ultimateController, 'getAll']);
+$router->get('/ultimates/{id}', [$ultimateController, 'getById']);
+
+$router->get('/particle', [$particleController, 'getAll']);
+$router->get('/particle/{id}', [$particleController, 'getById']);
 
 //$router->post('/users', [$userController, 'create']);
 //$router->put('/users/{id}', [$userController, 'update']);

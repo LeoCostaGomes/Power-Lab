@@ -7,26 +7,26 @@ use App\Repositories\PaddleRepository;
 
 class PaddleController
 {
-    public function __construct(private PaddleRepository $paddleRepository) {}
-
-    public function index(Request $request, array $params): void
-{
-    $paddles = $this->paddleRepository->findAll();
-    JsonResponse::send(array_map(fn ($p) => ['id' => $p->getId(), 'name' => $p->getName()], $paddles));
-}
-
-    public function show(Request $request, array $params): void
+    public function __construct(private PaddleRepository $paddleRepository)
     {
-        header('Content-Type: application/json');
+    }
+
+    public function getAll(Request $request, array $params): void
+    {
+        $paddles = $this->paddleRepository->findAll();
+        JsonResponse::send(array_map(fn($p) => ['id' => $p->getId(), 'name' => $p->getName(), 'descriptions' => $p->getAllDescriptions(), 'territory' => $p->getNameTerritory()], $paddles));
+    }
+
+    public function getById(Request $request, array $params): void
+    {
         $paddle = $this->paddleRepository->findById((int) $params['id']);
 
         if ($paddle === null) {
-            http_response_code(404);
-            JsonResponse::send(['error' => 'Paddle não encontrado']);
+            JsonResponse::send(['error' => 'Paddle não encontrado'], 404);
             return;
         }
 
-        JsonResponse::send(['id' => $paddle->getId(), 'name' => $paddle->getName()]);
+        JsonResponse::send(['id' => $paddle->getId(), 'name' => $paddle->getName(), 'descriptions' => $paddle->getAllDescriptions(), 'territory' => $paddle->getNameTerritory()]);
     }
 }
 ?>
