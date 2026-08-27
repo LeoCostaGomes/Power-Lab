@@ -153,7 +153,9 @@ class UserRepository extends AbstractWritableRepository
      */
     public function update(int $id, object $data): bool
     {
-        $this->validateEmailAndIP($data->email, $data->ip);
+        $this->validateEmail($data->email);
+
+        $this->validateIP($data->ip);
 
         $stmt = $this->db->prepare('UPDATE tb_user SET name = :name, email = :email, password = :password, ip = :ip WHERE id_user = :id');
         $stmt->bindValue(':name', $data->name);

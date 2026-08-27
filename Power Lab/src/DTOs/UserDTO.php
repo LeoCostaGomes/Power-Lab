@@ -2,7 +2,7 @@
 
 namespace App\DTOs;
 
-final readonly class UserDTO
+final class UserDTO
 {
     public function __construct(
         public string $name,
