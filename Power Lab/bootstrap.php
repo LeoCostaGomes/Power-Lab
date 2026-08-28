@@ -1,7 +1,9 @@
 <?php
 
 use App\Controllers\PaddleController;
+use App\Controllers\PaddleSkinController;
 use App\Controllers\ParticleController;
+use App\Controllers\SkinController;
 use App\Controllers\UltimateController;
 use App\Repositories\TerritoryRepository;
 use App\Repositories\PaddleRepository;
@@ -66,18 +68,28 @@ $stageRepository = new StageRepository(
 $paddleController = new PaddleController($paddleRepository);
 $ultimateController = new UltimateController($ultimateRepository);
 $particleController = new ParticleController($particleRepository);
+$skinController = new SkinController($skinRepository);
+$paddleSkinController = new PaddleSkinController($paddleSkinRepository);
 
 // ---- Rotas ----
 $router = new Router();
 
-$router->get('/paddles', [$paddleController, 'getAll']);
-$router->get('/paddles/{id}', [$paddleController, 'getById']);
+$router->get('/paddles/get', [$paddleController, 'getAll']);
+$router->get('/paddles/get/{id}', [$paddleController, 'getById']);
 
-$router->get('/ultimates', [$ultimateController, 'getAll']);
-$router->get('/ultimates/{id}', [$ultimateController, 'getById']);
+$router->get('/ultimates/get', [$ultimateController, 'getAll']);
+$router->get('/ultimates/get/{id}', [$ultimateController, 'getById']);
 
-$router->get('/particle', [$particleController, 'getAll']);
-$router->get('/particle/{id}', [$particleController, 'getById']);
+$router->get('/particle/get', [$particleController, 'getAll']);
+$router->get('/particle/get/{id}', [$particleController, 'getById']);
+
+$router->get('/skins/get', [$skinController, 'getAll']);
+$router->get('/skins/get/{id}', [$skinController, 'getById']);
+
+$router->get('/paddles-skins/get', [$paddleSkinController, 'getAll']);
+$router->get('/paddles-skins/get/{paddleId}/{skinId}', [$paddleSkinController, 'getById']);
+$router->get('/paddle/{paddleId}/skins', [$paddleSkinController, 'getAllSkinsFromPaddleById']);
+$router->get('/skin/{skinId}/paddles', [$paddleSkinController, 'getAllPaddlesFromSkinById']);
 
 //$router->post('/users', [$userController, 'create']);
 //$router->put('/users/{id}', [$userController, 'update']);
