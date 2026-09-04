@@ -1,5 +1,6 @@
 <?php
 
+use App\Controllers\BoxTypeController;
 use App\Controllers\PaddleController;
 use App\Controllers\PaddleSkinController;
 use App\Controllers\ParticleController;
@@ -70,6 +71,7 @@ $ultimateController = new UltimateController($ultimateRepository);
 $particleController = new ParticleController($particleRepository);
 $skinController = new SkinController($skinRepository);
 $paddleSkinController = new PaddleSkinController($paddleSkinRepository);
+$boxTypeController = new BoxTypeController($boxTypeRepository);
 
 // ---- Rotas ----
 $router = new Router();
@@ -90,6 +92,9 @@ $router->get('/paddles-skins/get', [$paddleSkinController, 'getAll']);
 $router->get('/paddle/{paddleId}/skin/{skinId}/get', [$paddleSkinController, 'getById']);
 $router->get('/paddle/{paddleId}/skins/get', [$paddleSkinController, 'getAllSkinsFromPaddleById']);
 $router->get('/skin/{skinId}/paddles/get', [$paddleSkinController, 'getAllPaddlesFromSkinById']);
+
+$router->get('/boxes/get', [$boxTypeController, 'getAll']);
+$router->get('/boxes/get/{id}', [$boxTypeController, 'getById']);
 
 //$router->post('/users', [$userController, 'create']);
 //$router->put('/users/{id}', [$userController, 'update']);
