@@ -87,9 +87,9 @@ $router->get('/skins/get', [$skinController, 'getAll']);
 $router->get('/skins/get/{id}', [$skinController, 'getById']);
 
 $router->get('/paddles-skins/get', [$paddleSkinController, 'getAll']);
-$router->get('/paddles-skins/get/{paddleId}/{skinId}', [$paddleSkinController, 'getById']);
-$router->get('/paddle/{paddleId}/skins', [$paddleSkinController, 'getAllSkinsFromPaddleById']);
-$router->get('/skin/{skinId}/paddles', [$paddleSkinController, 'getAllPaddlesFromSkinById']);
+$router->get('/paddle/{paddleId}/skin/{skinId}/get', [$paddleSkinController, 'getById']);
+$router->get('/paddle/{paddleId}/skins/get', [$paddleSkinController, 'getAllSkinsFromPaddleById']);
+$router->get('/skin/{skinId}/paddles/get', [$paddleSkinController, 'getAllPaddlesFromSkinById']);
 
 //$router->post('/users', [$userController, 'create']);
 //$router->put('/users/{id}', [$userController, 'update']);
