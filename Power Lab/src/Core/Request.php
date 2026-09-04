@@ -13,16 +13,28 @@ class Request
     {
         $this->method = $_SERVER['REQUEST_METHOD'];
 
-        $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
-        $uri = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+        $uri = parse_url(
+            $_SERVER['REQUEST_URI'],
+            PHP_URL_PATH
+        );
 
-        if ($scriptDir !== '/' && str_starts_with($uri, $scriptDir)) {
-            $uri = substr($uri, strlen($scriptDir));
+        $uri = urldecode($uri);
+
+        // Remove o caminho até /public
+        $publicPosition = strpos($uri, '/public');
+
+        if ($publicPosition !== false) {
+            $uri = substr($uri, $publicPosition + strlen('/public'));
         }
 
         $this->path = '/' . trim($uri, '/');
+
         $this->queryParams = $_GET;
-        $this->body = json_decode(file_get_contents('php://input'), true) ?? [];
+
+        $this->body = json_decode(
+            file_get_contents('php://input'),
+            true
+        ) ?? [];
     }
 
     public function getMethod(): string
