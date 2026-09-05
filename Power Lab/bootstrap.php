@@ -1,6 +1,8 @@
 <?php
 
 use App\Controllers\BoxTypeController;
+use App\Controllers\GameModeController;
+use App\Controllers\ModifierController;
 use App\Controllers\PaddleController;
 use App\Controllers\PaddleSkinController;
 use App\Controllers\ParticleController;
@@ -23,6 +25,7 @@ use App\Repositories\UserRepository;
 use App\Factories\ItemTypeFactory;
 use App\Core\Router;
 use App\Core\Request;
+use App\Repositories\GameModeRepository;
 
 // ---- Repositories sem dependência ----
 $territoryRepository = new TerritoryRepository();
@@ -65,6 +68,8 @@ $stageRepository = new StageRepository(
     $modifierRepository
 );
 
+$gameModeRepository = new GameModeRepository();
+
 // ---- Controllers, já com as Repositories que cada um precisa ----
 $paddleController = new PaddleController($paddleRepository);
 $ultimateController = new UltimateController($ultimateRepository);
@@ -72,6 +77,8 @@ $particleController = new ParticleController($particleRepository);
 $skinController = new SkinController($skinRepository);
 $paddleSkinController = new PaddleSkinController($paddleSkinRepository);
 $boxTypeController = new BoxTypeController($boxTypeRepository);
+$modifierController = new ModifierController($modifierRepository);
+$gameModeController = new GameModeController($gameModeRepository);
 
 // ---- Rotas ----
 $router = new Router();
@@ -95,6 +102,12 @@ $router->get('/skin/{skinId}/paddles/get', [$paddleSkinController, 'getAllPaddle
 
 $router->get('/boxes/get', [$boxTypeController, 'getAll']);
 $router->get('/boxes/get/{id}', [$boxTypeController, 'getById']);
+
+$router->get('/modifiers/get', [$modifierController, 'getAll']);
+$router->get('/modifiers/get/{id}', [$modifierController, 'getById']);
+
+$router->get('/gamemodes/get', [$gameModeController, 'getAll']);
+$router->get('/gamemodes/get/{id}', [$gameModeController, 'getById']);
 
 //$router->post('/users', [$userController, 'create']);
 //$router->put('/users/{id}', [$userController, 'update']);
