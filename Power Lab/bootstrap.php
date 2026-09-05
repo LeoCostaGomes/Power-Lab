@@ -2,7 +2,9 @@
 
 use App\Controllers\BoxTypeController;
 use App\Controllers\GameModeController;
+use App\Controllers\GameVersionController;
 use App\Controllers\ModifierController;
+use App\Controllers\ObjectiveController;
 use App\Controllers\PaddleController;
 use App\Controllers\PaddleSkinController;
 use App\Controllers\ParticleController;
@@ -26,6 +28,7 @@ use App\Factories\ItemTypeFactory;
 use App\Core\Router;
 use App\Core\Request;
 use App\Repositories\GameModeRepository;
+use App\Repositories\GameVersionRepository;
 
 // ---- Repositories sem dependência ----
 $territoryRepository = new TerritoryRepository();
@@ -69,6 +72,7 @@ $stageRepository = new StageRepository(
 );
 
 $gameModeRepository = new GameModeRepository();
+$gameVersionRepository = new GameVersionRepository();
 
 // ---- Controllers, já com as Repositories que cada um precisa ----
 $paddleController = new PaddleController($paddleRepository);
@@ -79,6 +83,8 @@ $paddleSkinController = new PaddleSkinController($paddleSkinRepository);
 $boxTypeController = new BoxTypeController($boxTypeRepository);
 $modifierController = new ModifierController($modifierRepository);
 $gameModeController = new GameModeController($gameModeRepository);
+$objectiveController = new ObjectiveController($objectiveRepository);
+$gameVersionController = new GameVersionController($gameVersionRepository);
 
 // ---- Rotas ----
 $router = new Router();
@@ -89,8 +95,8 @@ $router->get('/paddles/get/{id}', [$paddleController, 'getById']);
 $router->get('/ultimates/get', [$ultimateController, 'getAll']);
 $router->get('/ultimates/get/{id}', [$ultimateController, 'getById']);
 
-$router->get('/particle/get', [$particleController, 'getAll']);
-$router->get('/particle/get/{id}', [$particleController, 'getById']);
+$router->get('/particles/get', [$particleController, 'getAll']);
+$router->get('/particles/get/{id}', [$particleController, 'getById']);
 
 $router->get('/skins/get', [$skinController, 'getAll']);
 $router->get('/skins/get/{id}', [$skinController, 'getById']);
@@ -108,6 +114,12 @@ $router->get('/modifiers/get/{id}', [$modifierController, 'getById']);
 
 $router->get('/gamemodes/get', [$gameModeController, 'getAll']);
 $router->get('/gamemodes/get/{id}', [$gameModeController, 'getById']);
+
+$router->get('/objectives/get', [$objectiveController, 'getAll']);
+$router->get('/objectives/get/{id}', [$objectiveController, 'getById']);
+
+$router->get('/gameversions/get', [$gameVersionController, 'getAll']);
+$router->get('/gameversions/get/{id}', [$gameVersionController, 'getById']);
 
 //$router->post('/users', [$userController, 'create']);
 //$router->put('/users/{id}', [$userController, 'update']);
