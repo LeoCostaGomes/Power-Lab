@@ -40,6 +40,8 @@ $objectiveRepository = new ObjectiveRepository();
 $enemyTypeRepository = new EnemyTypeRepository();
 $modifierRepository = new ModifierRepository();
 $userRepository = new UserRepository();
+$gameModeRepository = new GameModeRepository();
+$gameVersionRepository = new GameVersionRepository();
 
 // ---- Dependem das de cima ----
 $paddleRepository = new PaddleRepository($territoryRepository);
@@ -70,9 +72,6 @@ $stageRepository = new StageRepository(
     $itemTypeFactory,
     $modifierRepository
 );
-
-$gameModeRepository = new GameModeRepository();
-$gameVersionRepository = new GameVersionRepository();
 
 // ---- Controllers, já com as Repositories que cada um precisa ----
 $paddleController = new PaddleController($paddleRepository);
