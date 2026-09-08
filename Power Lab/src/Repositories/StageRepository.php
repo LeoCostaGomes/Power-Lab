@@ -13,16 +13,16 @@ class StageRepository extends AbstractRepository
     private PDO $db;
     private TerritoryRepository $territoryRepository;
     private PaddleRepository $paddleRepository;
-    private UltimateRepository $ultimateRepository;
+    private UltimateRepository | null $ultimateRepository;
     private SkinRepository $skinRepository;
-    private ParticleRepository $particleRepository;
+    private ParticleRepository | null $particleRepository;
     private DifficultyRepository $difficultyRepository;
     private ObjectiveRepository $objectiveRepository;
     private EnemyTypeRepository $enemyTypeRepository;
     private ItemTypeFactory $itemTypeFactory;
     private ModifierRepository $modifierRepository;
 
-    public function __construct(TerritoryRepository $territoryRepository, PaddleRepository $paddleRepository, UltimateRepository $ultimateRepository, SkinRepository $skinRepository, ParticleRepository $particleRepository, DifficultyRepository $difficultyRepository, ObjectiveRepository $objectiveRepository, EnemyTypeRepository $enemyTypeRepository, ItemTypeFactory $itemTypeFactory, ModifierRepository $modifierRepository)
+    public function __construct(TerritoryRepository $territoryRepository, PaddleRepository $paddleRepository, UltimateRepository | null $ultimateRepository, SkinRepository $skinRepository, ParticleRepository | null $particleRepository, DifficultyRepository $difficultyRepository, ObjectiveRepository $objectiveRepository, EnemyTypeRepository $enemyTypeRepository, ItemTypeFactory $itemTypeFactory, ModifierRepository $modifierRepository)
     {
         $this->db = DataBase::getInstance();
         $this->territoryRepository = $territoryRepository;
@@ -56,9 +56,9 @@ class StageRepository extends AbstractRepository
                 name: $row['name'],
                 paddleBot: $this->paddleRepository->findById((int) $row['fk_id_paddle']),
                 paddleStage: (int) $row['paddle_stage'],
-                ultimateBot: $this->ultimateRepository->findById((int) $row['fk_id_ult']),
+                ultimateBot: $this->ultimateRepository ? $this->ultimateRepository->findById((int) $row['fk_id_ult']) : null,
                 skinBot: $this->skinRepository->findById((int) $row['fk_id_skin']),
-                particleBot: $this->particleRepository->findById((int) $row['fk_id_particle']),
+                particleBot: $this->particleRepository ? $this->particleRepository->findById((int) $row['fk_id_particle']) : null,
                 difficulty: $this->difficultyRepository->findById((int) $row['fk_difficulty']),
                 objective: $this->objectiveRepository->findById((int) $row['fk_objective']),
                 objectiveQuantity: (int) $row['objective_quantity'],

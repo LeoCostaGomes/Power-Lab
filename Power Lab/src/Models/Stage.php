@@ -10,9 +10,9 @@ class Stage
     private string $name;
     private Paddle $paddleBot;
     private int $paddleStage;
-    private Ultimate $ultimateBot;
+    private Ultimate | null $ultimateBot;
     private Skin $skinBot;
-    private Particle $particleBot;
+    private Particle | null $particleBot;
     private Difficulty $difficulty;
     private Objective $objective;
     private int $objectiveQuantity;
@@ -30,9 +30,9 @@ class Stage
         string $name,
         Paddle $paddleBot,
         int $paddleStage,
-        Ultimate $ultimateBot,
+        Ultimate | null $ultimateBot,
         Skin $skinBot,
-        Particle $particleBot,
+        Particle | null $particleBot,
         Difficulty $difficulty,
         Objective $objective,
         int $objectiveQuantity,
@@ -82,7 +82,7 @@ class Stage
         return $this->paddleStage;
     }
 
-    public function getUltimateBot(): Ultimate
+    public function getUltimateBot(): Ultimate | null
     {
         return $this->ultimateBot;
     }
@@ -92,7 +92,7 @@ class Stage
         return $this->skinBot;
     }
 
-    public function getParticleBot(): Particle
+    public function getParticleBot(): Particle | null
     {
         return $this->particleBot;
     }

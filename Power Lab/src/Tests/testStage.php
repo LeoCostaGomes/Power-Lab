@@ -112,9 +112,19 @@ try {
         echo "  Difficulty: {$stage->getNameDifficulty()}\n";
         echo "  EnemyType: {$stage->getNameEnemyType()}\n";
         echo "  Paddle bot: {$stage->getPaddleBot()->getName()} (stage {$stage->getPaddleStage()})\n";
-        echo "  Ultimate bot: {$stage->getUltimateBot()->getName()}\n";
+        if ($stage->getUltimateBot()) {
+            echo "  Ultimate bot: {$stage->getUltimateBot()->getName()}\n";
+        }
+        else {
+            echo "  Ultimate bot: (nenhum)\n";
+        }
         echo "  Skin bot: {$stage->getSkinBot()->getName()}\n";
-        echo "  Particle bot: {$stage->getParticleBot()->getName()}\n";
+        if ($stage->getParticleBot()) {
+            echo "  Particle bot: {$stage->getParticleBot()->getName()}\n";
+        }
+        else {
+            echo "  Particle bot: (nenhum)\n";
+        }
         echo "  Objective: {$stage->getObjective()->getName()} (qtd {$stage->getObjectiveQuantity()})\n";
         echo "  Reward: {$stage->getRewardStage()->getRewardText()} (qtd {$stage->getRewardStageQuantity()})\n";
 
