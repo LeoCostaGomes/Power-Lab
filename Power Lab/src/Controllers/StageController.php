@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controllers;
 
 use App\Core\JsonResponse;
@@ -46,10 +47,10 @@ class StageController
             'name' => $stage->getNameStage(),
             'paddleBot' => $this->formatPaddleBot(
                 $stage->getPaddleBot(),
-                $stage->getPaddleStage(),
-                $stage->getSkinBot()
+                $stage->getPaddleStage()
             ),
             'ultimateBot' => $this->formatUltimate($stage->getUltimateBot()),
+            'skinBot' => $this->formatSkin($stage->getSkinBot(), $stage->getPaddleBot()->getId()),
             'particleBot' => $this->formatParticle($stage->getParticleBot()),
             'territory' => $stage->getNameTerritory(),
             'difficulty' => $stage->getNameDifficulty(),
@@ -64,7 +65,7 @@ class StageController
         ];
     }
 
-    private function formatPaddleBot(Paddle $paddleBot, int $paddleStageNumber, Skin $skinBot): array
+    private function formatPaddleBot(Paddle $paddleBot, int $paddleStageNumber): array
     {
         // Nem toda raquete tem descrição pra todos os 1-5 estágios ainda
         // (lembra do "ainda sendo lançadas aos poucos") -- por isso o try/catch
@@ -75,18 +76,11 @@ class StageController
             $stageDescription = null;
         }
 
-        // Combinação específica dessa skin com essa raquete -- pode não existir
-        // ainda (skin nova sem sprite pra essa raquete, por exemplo), então
-        // não é erro, só fica null na resposta.
-        $skinSprite = $this->paddleSkinRepository->findById($paddleBot->getId(), $skinBot->getId());
-
         return [
             'id' => $paddleBot->getId(),
             'name' => $paddleBot->getName(),
             'stageNumber' => $paddleStageNumber,
-            'stageDescription' => $stageDescription,
-            'skinName' => $skinBot->getName(),
-            'skinSprite' => $skinSprite?->getBase64Src(),
+            'stageDescription' => $stageDescription
         ];
     }
 
@@ -100,6 +94,17 @@ class StageController
             'name' => $ultimate->getName(),
             'description' => $ultimate->getDescription(),
             'sprite' => $ultimate->getSpriteIcon()->getBase64Src(),
+        ];
+    }
+
+    private function formatSkin(Skin $skinBot, int $idPaddleBot): array
+    {
+        $skinSprite = $this->paddleSkinRepository->findById($idPaddleBot, $skinBot->getId());
+
+        return [
+            'id' => $skinBot->getId(),
+            'name' => $skinBot->getName(),
+            'sprite' => $skinSprite?->getBase64Src(),
         ];
     }
 
@@ -118,12 +123,25 @@ class StageController
 
     private function formatObjective(Objective $objective, int $quantity): array
     {
+        $quantityText = $quantity;
+        if ($objective->getId() === 1) {
+            $quantityText = $this->formatTime($quantity);
+        }
+
         return [
             'id' => $objective->getId(),
             'name' => $objective->getName(),
             'description' => $objective->getDescription(),
-            'quantity' => $quantity,
+            'quantity' => $quantityText,
         ];
+    }
+
+    private function formatTime(int $segundos): string
+    {
+        $minutos = intdiv($segundos, 60);
+        $segundosRestantes = $segundos % 60;
+
+        return "{$minutos}:" . str_pad($segundosRestantes, 2, "0", STR_PAD_LEFT);
     }
 
     private function formatModifier(?Modifier $modifier): ?array

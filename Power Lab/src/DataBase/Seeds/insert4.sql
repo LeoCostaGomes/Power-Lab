@@ -75,61 +75,61 @@ INSERT INTO tb_stage (
 ) VALUES 
 
 -- Fase 1
-(1, null, null, 1, 'Primeiro Desafio', NULL, NULL, NULL, 1, 'Box/1', 1, 1, 60, 1, 1, 1),
+(1, NULL, NULL, 1, 'Primeiro Desafio', NULL, NULL, NULL, 1, 'Box/1', 1, 1, 60, 1, 1, 1),
 
 -- Fase 2
-(1, 7, 2, 2, 'Ultimates', NULL, NULL, NULL, 1, 'Pongcoin', 500, 1, 90, 1, 1, 1),
+(1, 6, 2, 2, 'Ultimates', NULL, NULL, NULL, 1, 'Pongcoin', 500, 1, 90, 1, 1, 1),
 
 -- Fase 3
-(2, 2, 6, 18, 'Ameaça Glacial', NULL, NULL, NULL, 1, 'Box/1', 1, 1, 90, 1, 1, 1),
+(2, 1, 6, 18, 'Ameaça Glacial', NULL, NULL, NULL, 1, 'Box/1', 1, 1, 90, 1, 1, 1),
 
 -- Fase 4
-(6, 10, 7, 11, 'Mudança de Rumo', NULL, NULL, NULL, 1, 'Box/1', 1, 1, 90, 1, 1, 1),
+(6, 9, 7, 11, 'Mudança de Rumo', NULL, NULL, NULL, 1, 'Box/1', 1, 1, 90, 1, 1, 1),
 
 -- Fase 5
-(2, 5, 1, 14, 'Uma Verdadeira Ameaça', NULL, NULL, NULL, 1, 'Box/1', 3, 3, 8, 2, 2, 1),
+(2, 4, 1, 14, 'Uma Verdadeira Ameaça', NULL, NULL, NULL, 1, 'Box/1', 3, 3, 8, 2, 2, 1),
 
 -- Fase 6
-(4, 7, 8, 3, 'Descargas Constantes', NULL, NULL, NULL, 2, 'Pongcoin', 200, 1, 90, 2, 1, 1),
+(4, 6, 8, 3, 'Descargas Constantes', NULL, NULL, NULL, 2, 'Pongcoin', 200, 1, 90, 2, 1, 1),
 
 -- Fase 7
-(6, 4, 1, 16, 'Trajetória Imprevisível', NULL, NULL, NULL, 2, 'Box/1', 1, 1, 90, 2, 1, 1),
+(6, 3, 1, 16, 'Trajetória Imprevisível', NULL, NULL, NULL, 2, 'Box/1', 1, 1, 90, 2, 1, 1),
 
 -- Fase 8
-(8, 4, 3, 13, 'Devagar e Sempre', NULL, NULL, NULL, 2, 'Box/1', 1, 1, 90, 2, 1, 1),
+(8, 3, 3, 13, 'Devagar e Sempre', NULL, NULL, NULL, 2, 'Box/1', 1, 1, 90, 2, 1, 1),
 
 -- Fase 9
-(1, 10, 2, 9, 'Velocidade do Som', NULL, NULL, NULL, 2, 'Box/1', 2, 1, 120, 2, 1, 1),
+(1, 9, 2, 9, 'Velocidade do Som', NULL, NULL, NULL, 2, 'Box/1', 2, 1, 120, 2, 1, 1),
 
 -- Fase 10
-(4, 5, 2, 14, 'Um Inimigo Imprevisível!', NULL, NULL, NULL, 2, 'Box/2', 1, 3, 10, 2, 3, 1),
+(4, 4, 2, 14, 'Um Inimigo Imprevisível!', NULL, NULL, NULL, 2, 'Box/2', 1, 3, 10, 2, 3, 1),
 
 -- Fase 11
-(10, 4, 5, 11, 'Balada Temporal', 1, NULL, NULL, 2, 'Box/1', 1, 1, 120, 2, 1, 1),
+(10, 3, 5, 11, 'Balada Temporal', 1, NULL, NULL, 2, 'Box/1', 1, 1, 120, 2, 1, 1),
 
 -- Fase 12
-(2, 10, 2, 15, 'Encruzilhada', 3, NULL, NULL, 2, 'Box/1', 1, 1, 120, 2, 1, 1),
+(2, 9, 2, 15, 'Encruzilhada', 3, NULL, NULL, 2, 'Box/1', 1, 1, 120, 2, 1, 1),
 
 -- Fase 13
-(10, 10, 3, 9, 'Movimento Distorcido', 2, NULL, NULL, 2, 'Box/1', 1, 1, 120, 2, 1, 1),
+(10, 9, 3, 9, 'Movimento Distorcido', 2, NULL, NULL, 2, 'Box/1', 1, 1, 120, 2, 1, 1),
 
 -- Fase 14
-(1, 10, 7, 9, 'Velocidade da Luz', 4, NULL, NULL, 2, 'Box/1', 1, 1, 120, 2, 1, 1),
+(1, 9, 7, 9, 'Velocidade da Luz', 4, NULL, NULL, 2, 'Box/1', 1, 1, 120, 2, 1, 1),
 
 -- Fase 15
-(1, 4, 4, 16, 'É Pegar ou Largar', 3, 1, NULL, 2, 'Box/1', 3, 3, 8, 2, 2, 1),
+(1, 3, 4, 16, 'É Pegar ou Largar', 3, 1, NULL, 2, 'Box/1', 3, 3, 8, 2, 2, 1),
 
 -- Fase 16
-(1, 7, 8, 3, 'Armadilha Traiçoeira', 7, NULL, NULL, 2, 'Pongcoin', 500, 1, 120, 2, 1, 1),
+(1, 6, 8, 3, 'Armadilha Traiçoeira', 7, NULL, NULL, 2, 'Pongcoin', 500, 1, 120, 2, 1, 1),
 
 -- Fase 17
-(1, 10, 3, 6, 'Bênçãos e Maldições', 7, 4, NULL, 2, 'Box/1', 1, 1, 120, 2, 1, 1),
+(1, 9, 3, 6, 'Bênçãos e Maldições', 7, 4, NULL, 2, 'Box/1', 1, 1, 120, 2, 1, 1),
 
 -- Fase 18
-(4, 7, 8, 3, 'Tortura Interminável', 6, NULL, NULL, 2, 'Box/1', 1, 1, 120, 2, 1, 1),
+(4, 6, 8, 3, 'Tortura Interminável', 6, NULL, NULL, 2, 'Box/1', 1, 1, 120, 2, 1, 1),
 
 -- Fase 19
-(2, 10, 7, 2, 'Caixinha de Surpresas', 5, NULL, NULL, 2, 'Box/1', 2, 1, 150, 2, 1, 1),
+(2, 9, 7, 2, 'Caixinha de Surpresas', 5, NULL, NULL, 2, 'Box/1', 2, 1, 150, 2, 1, 1),
 
 -- Fase 20
-(1, 7, 7, 1, 'A Última Balada', 1, NULL, NULL, 2, 'Box/2', 1, 3, 10, 2, 3, 1);
+(1, 6, 7, 1, 'A Última Balada', 1, NULL, NULL, 2, 'Box/2', 1, 3, 10, 2, 3, 1);
