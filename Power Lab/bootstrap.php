@@ -9,6 +9,7 @@ use App\Controllers\PaddleController;
 use App\Controllers\PaddleSkinController;
 use App\Controllers\ParticleController;
 use App\Controllers\SkinController;
+use App\Controllers\StageController;
 use App\Controllers\UltimateController;
 use App\Repositories\TerritoryRepository;
 use App\Repositories\PaddleRepository;
@@ -84,6 +85,7 @@ $modifierController = new ModifierController($modifierRepository);
 $gameModeController = new GameModeController($gameModeRepository);
 $objectiveController = new ObjectiveController($objectiveRepository);
 $gameVersionController = new GameVersionController($gameVersionRepository);
+$stageController = new StageController($stageRepository, $paddleSkinRepository);
 
 // ---- Rotas ----
 $router = new Router();
@@ -119,6 +121,9 @@ $router->get('/objectives/get/{id}', [$objectiveController, 'getById']);
 
 $router->get('/gameversions/get', [$gameVersionController, 'getAll']);
 $router->get('/gameversions/get/{id}', [$gameVersionController, 'getById']);
+
+$router->get('/stages/get', [$stageController, 'getAll']);
+$router->get('/stages/get/{id}', [$stageController, 'getById']);
 
 //$router->post('/users', [$userController, 'create']);
 //$router->put('/users/{id}', [$userController, 'update']);
