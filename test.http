@@ -12,8 +12,8 @@ POST http://localhost/Power%20Lab/Power-Lab/Power%20Lab/public/users/post
 Content-Type: application/json
 
 {
-    "name": "Leonardo2",
-    "email": "teste2@email.com",
+    "name": "Leonardo",
+    "email": "teste@email.com",
     "password": "123456"
 }
 
@@ -37,6 +37,6 @@ POST http://localhost/Power%20Lab/Power-Lab/Power%20Lab/public/users/login
 Content-Type: application/json
 
 {
-    "email": "teste2@email.com",
+    "email": "teste@email.com",
     "password": "123456"
 }

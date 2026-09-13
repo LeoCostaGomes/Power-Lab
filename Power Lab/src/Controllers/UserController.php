@@ -8,6 +8,8 @@ use App\DTOs\UserDTO;
 use App\DTOs\UserUpdateDTO;
 use App\Models\User;
 use InvalidArgumentException;
+use App\Core\TokenService;
+
 class UserController
 {
     public function __construct(private UserRepository $userRepository) {}
@@ -20,7 +22,14 @@ class UserController
 
     public function getById(Request $request, array $params): void
     {
-        $user = $this->userRepository->findById((int) $params['id']);
+        $id = (int) $params['id'];
+
+        if (!$this->authenticateAs($request, $id)) {
+            JsonResponse::send(['error' => 'Não autorizado'], 401);
+            return;
+        }
+
+        $user = $this->userRepository->findById($id);
 
         if ($user === null) {
             JsonResponse::send(['error' => 'Usuário não encontrado'], 404);
@@ -63,8 +72,14 @@ class UserController
     public function update(Request $request, array $params): void
     {
         $id = (int) $params['id'];
+
+        if (!$this->authenticateAs($request, $id)) {
+            JsonResponse::send(['error' => 'Não autorizado'], 401);
+            return;
+        }
+
         $body = $request->getBody();
- 
+
         if ($this->userRepository->findById($id) === null) {
             JsonResponse::send(['error' => 'Usuário não encontrado'], 404);
             return;
@@ -96,6 +111,11 @@ class UserController
     {
         $id = (int) $params['id'];
 
+        if (!$this->authenticateAs($request, $id)) {
+            JsonResponse::send(['error' => 'Não autorizado'], 401);
+            return;
+        }
+
         if (!$this->userRepository->delete($id)) {
             JsonResponse::send(['error' => 'Usuário não encontrado'], 404);
             return;
@@ -120,7 +140,27 @@ class UserController
             return;
         }
 
-        JsonResponse::send($this->formatUser($user));
+        JsonResponse::send([
+            'token' => TokenService::generate($user->getId()),
+            'user' => $this->formatUser($user),
+        ]);
+    }
+
+    /**
+     * Confere se o token do cabeçalho Authorization pertence exatamente
+     * ao usuário de $expectedUserId -- não só "algum token válido".
+     */
+    private function authenticateAs(Request $request, int $expectedUserId): bool
+    {
+        $token = $request->getBearerToken();
+
+        if ($token === null) {
+            return false;
+        }
+
+        $authenticatedUserId = TokenService::validate($token);
+
+        return $authenticatedUserId !== null && $authenticatedUserId === $expectedUserId;
     }
 
     /**
