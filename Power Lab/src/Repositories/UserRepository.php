@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Core\DataBase;
 use App\DTOs\UserDTO;
+use App\DTOs\UserUpdateDTO;
 use App\Models\Email;
 use App\Models\IP;
 use App\Models\User;
@@ -31,7 +32,7 @@ class UserRepository extends AbstractWritableRepository
         }
     }
 
-    private function addUser(int $id, string $name, string $email, string $password, string $ip)
+    private function addUser(int $id, string $name, string $email, string $password, string $ip): void
     {
         $user = $this->instantiateUser($id, $name, $email, $password, $ip);
 
@@ -40,22 +41,34 @@ class UserRepository extends AbstractWritableRepository
 
     private function instantiateUser(int $id, string $name, string $email, string $password, string $ip): User
     {
-        $newEmail = new Email(
-            email: $email
-        );
+        $emailObj = new Email(email: $email);
+        $ipObj = new IP($ip);
 
-        $newIp = new IP(
-            $ip
-        );
-
-        return $user = new User(
+        return new User(
             id: $id,
             name: $name,
-            email: $newEmail,
+            email: $emailObj,
             password: $password,
-            ip: $newIp,
+            ip: $ipObj,
             pollVotedItem: null, //Se fizer a enquete tem que mudar essa lógica
         );
+    }
+
+    /**
+     * Recarrega um usuário direto do banco e atualiza o cache em memória.
+     * Usado depois de qualquer INSERT/UPDATE, pra nunca precisar "adivinhar"
+     * o valor de um campo que não foi alterado (a senha, por exemplo).
+     */
+    private function refreshUserFromDatabase(int $id): void
+    {
+        $stmt = $this->db->prepare('SELECT * FROM tb_user WHERE id_user = :id');
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $row = $stmt->fetch();
+
+        if ($row !== false) {
+            $this->addUser((int) $row['id_user'], $row['name'], $row['email'], $row['password'], $row['ip']);
+        }
     }
 
     public function findById(int $id): ?User
@@ -63,47 +76,22 @@ class UserRepository extends AbstractWritableRepository
         return parent::findById($id);
     }
 
-    public function validateEmailAndIP(String $email, String $ip)
-    {
-        if ($this->emailExists($email)) throw new InvalidArgumentException("Este email já foi usado!");
-
-        //Adicionar verificação se IP ja existe no banco caso seja necessário
-
-        $this->validateEmail($email);
-
-        $this->validateIP($ip);
-    }
-
-    public function emailExists(String $email): bool
+    public function emailExists(string $email): bool
     {
         foreach ($this->items as $user) {
-            if ($user->compareEmail($email)) return true;
+            if ($user->compareEmail($email)) {
+                return true;
+            }
         }
         return false;
     }
 
-    public function IPExists(String $ip): bool
+    public function IPExists(string $ip): bool
     {
         foreach ($this->items as $user) {
             if ($user->compareIP($ip)) return true;
         }
         return false;
-    }
-
-    public function validateEmail(String $email)
-    {
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                throw new InvalidArgumentException(
-                    "Invalid email address: '{$email}'."
-                );
-            }
-    }
-
-    public function validateIP(String $ip)
-    {
-        if (!filter_var($ip, FILTER_VALIDATE_IP)) {
-                throw new InvalidArgumentException("invalide address IP: '$ip'.");
-            }
     }
 
     /**
@@ -117,67 +105,84 @@ class UserRepository extends AbstractWritableRepository
     /**
      * @param UserDTO $data
      */
-    public function create(object $data): bool
+    public function create(mixed $data): bool
     {
-        $this->validateEmailAndIP($data->email, $data->ip);
+        if ($this->emailExists($data->email)) {
+            throw new InvalidArgumentException("Este email já foi usado!");
+        }
 
         $stmt = $this->db->prepare(
             'INSERT INTO tb_user (name, email, password, ip)
-         VALUES (:name, :email, :password, :ip)'
+             VALUES (:name, :email, :password, :ip)'
         );
 
         $stmt->bindValue(':name', $data->name);
         $stmt->bindValue(':email', $data->email);
-        $hashedPassword = password_hash($data->password, PASSWORD_DEFAULT);
-        $stmt->bindValue(':password', $hashedPassword);
+        $stmt->bindValue(':password', password_hash($data->password, PASSWORD_DEFAULT));
         $stmt->bindValue(':ip', $data->ip);
 
         if (!$stmt->execute()) {
             return false;
         }
 
-        $id = (int) $this->db->lastInsertId();
-
-        $this->addUser($id, $data->name, $data->email, $hashedPassword, $data->ip);
-
-        if (!isset($this->items[$id])) {
-            return false;
-        }
+        $this->refreshUserFromDatabase((int) $this->db->lastInsertId());
 
         return true;
     }
 
-
     /**
-     * @param UserDTO $data
+     * Atualização PARCIAL: só os campos não-nulos do UserUpdateDTO entram no UPDATE.
+     * Campos omitidos permanecem exatamente como estavam.
+     *
+     * @param UserUpdateDTO $data
      */
-    public function update(int $id, object $data): bool
+    public function update(int $id, mixed $data): bool
     {
-        $this->validateEmail($data->email);
+        if (!isset($this->items[$id])) {
+            return false;
+        }
 
-        $this->validateIP($data->ip);
+        if ($data->email !== null && $this->emailExists($data->email)) {
+            throw new InvalidArgumentException("Este email já foi usado!");
+        }
 
-        $stmt = $this->db->prepare('UPDATE tb_user SET name = :name, email = :email, password = :password, ip = :ip WHERE id_user = :id');
-        $stmt->bindValue(':name', $data->name);
-        $stmt->bindValue(':email', $data->email);
-        $hashedPassword = password_hash($data->password, PASSWORD_DEFAULT);
-        $stmt->bindValue(':password', $hashedPassword);
-        $stmt->bindValue(':ip', $data->ip);
+        $sets = [];
+        $bindings = [];
+
+        if ($data->name !== null) {
+            $sets[] = 'name = :name';
+            $bindings[':name'] = $data->name;
+        }
+        if ($data->email !== null) {
+            $sets[] = 'email = :email';
+            $bindings[':email'] = $data->email;
+        }
+        if ($data->password !== null) {
+            $sets[] = 'password = :password';
+            $bindings[':password'] = password_hash($data->password, PASSWORD_DEFAULT);
+        }
+        if ($data->ip !== null) {
+            $sets[] = 'ip = :ip';
+            $bindings[':ip'] = $data->ip;
+        }
+
+        if (empty($sets)) {
+            return true; // nada pra atualizar -- não é erro, só não faz nada
+        }
+
+        $sql = 'UPDATE tb_user SET ' . implode(', ', $sets) . ' WHERE id_user = :id';
+        $stmt = $this->db->prepare($sql);
+
+        foreach ($bindings as $param => $value) {
+            $stmt->bindValue($param, $value);
+        }
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
 
         if (!$stmt->execute()) {
             return false;
         }
 
-        $updatedUser = $this->instantiateUser(
-            $id,
-            $data->name,
-            $data->email,
-            $hashedPassword,
-            $data->ip
-        );
-
-        $this->items[$id] = $updatedUser;
+        $this->refreshUserFromDatabase($id);
 
         return true;
     }

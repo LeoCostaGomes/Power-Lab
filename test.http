@@ -1,0 +1,42 @@
+###
+
+GET http://localhost/Power%20Lab/Power-Lab/Power%20Lab/public/users/get
+
+###
+
+GET http://localhost/Power%20Lab/Power-Lab/Power%20Lab/public/users/get/1
+
+###
+
+POST http://localhost/Power%20Lab/Power-Lab/Power%20Lab/public/users/post
+Content-Type: application/json
+
+{
+    "name": "Leonardo2",
+    "email": "teste2@email.com",
+    "password": "123456"
+}
+
+###
+
+PUT http://localhost/Power%20Lab/Power-Lab/Power%20Lab/public/users/put/1
+Content-Type: application/json
+
+{
+    "name": "Leonardo",
+    "email": "testeee@email.com"
+}
+
+###
+
+DELETE http://localhost/Power%20Lab/Power-Lab/Power%20Lab/public/users/delete/1
+
+###
+
+POST http://localhost/Power%20Lab/Power-Lab/Power%20Lab/public/users/login
+Content-Type: application/json
+
+{
+    "email": "teste2@email.com",
+    "password": "123456"
+}

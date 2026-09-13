@@ -63,7 +63,12 @@ class User
         return $this->ip->compareIP($IP);
     }
 
-    public function compareEmail(String $email): bool
+    public function getEmail(): string
+    {
+        return $this->email->getEmail();
+    }
+
+    public function compareEmail(string $email): bool
     {
         return $this->email->compareEmail($email);
     }
