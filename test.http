@@ -5,6 +5,7 @@ GET http://localhost/Power%20Lab/Power-Lab/Power%20Lab/public/users/get
 ###
 
 GET http://localhost/Power%20Lab/Power-Lab/Power%20Lab/public/users/get/1
+Authorization: Bearer eyJ1c2VySWQiOjEsImV4cCI6MTc4OTY1ODIxNn0=.0606a99e770b8112abf30a26c8752ac15d2ab57524e3edd8637e3ad30886d500
 
 ###
 
@@ -18,14 +19,14 @@ Content-Type: application/json
 }
 
 ###
-
 PUT http://localhost/Power%20Lab/Power-Lab/Power%20Lab/public/users/put/1
+Authorization: Bearer eyJ1c2VySWQiOjEsImV4cCI6MTc4OTY1ODIxNn0=.0606a99e770b8112abf30a26c8752ac15d2ab57524e3edd8637e3ad30886d500
 Content-Type: application/json
 
 {
-    "name": "Leonardo",
-    "email": "testeee@email.com"
+    "name": "Leonidas"
 }
+
 
 ###
 
