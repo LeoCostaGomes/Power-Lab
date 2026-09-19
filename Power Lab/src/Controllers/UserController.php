@@ -2,6 +2,7 @@
 namespace App\Controllers;
 
 use App\Core\JsonResponse;
+use App\Core\LoginAttemptGuard;
 use App\Core\Request;
 use App\Repositories\UserRepository;
 use App\DTOs\UserDTO;
@@ -12,7 +13,7 @@ use App\Core\TokenService;
 
 class UserController
 {
-    public function __construct(private UserRepository $userRepository) {}
+    public function __construct(private UserRepository $userRepository, private LoginAttemptGuard $loginAttemptGuard) {}
 
     public function getAll(Request $request, array $params): void
     {
@@ -127,19 +128,29 @@ class UserController
     public function login(Request $request, array $params): void
     {
         $body = $request->getBody();
-
+ 
         if (empty($body['email']) || empty($body['password'])) {
             JsonResponse::send(['error' => 'email e password são obrigatórios'], 400);
             return;
         }
-
+ 
+        // Bloqueia por EMAIL (a conta-alvo), não por IP -- um atacante pode trocar
+        // de IP, mas o email que ele está tentando invadir continua o mesmo.
+        if ($this->loginAttemptGuard->isBlocked($body['email'])) {
+            JsonResponse::send(['error' => 'Muitas tentativas de login. Tenta de novo mais tarde.'], 429);
+            return;
+        }
+ 
         $user = $this->findByEmail($body['email']);
-
+ 
         if ($user === null || !$user->comparePassword($body['password'])) {
+            $this->loginAttemptGuard->registerFailure($body['email']);
             JsonResponse::send(['error' => 'Email ou senha incorretos'], 401);
             return;
         }
-
+ 
+        $this->loginAttemptGuard->clearAttempts($body['email']);
+ 
         JsonResponse::send([
             'token' => TokenService::generate($user->getId()),
             'user' => $this->formatUser($user),

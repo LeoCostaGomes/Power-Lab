@@ -5,6 +5,12 @@ namespace App\Core;
 class Router
 {
     private array $routes = [];
+    private RateLimiter $rateLimiter;
+
+    public function __construct()
+    {
+        $this->rateLimiter = new RateLimiter();
+    }
 
     public function get(string $path, callable $handler): void
     {
@@ -28,7 +34,6 @@ class Router
 
     private function addRoute(string $method, string $path, callable $handler): void
     {
-        // Transforma {id} num grupo nomeado de regex: {id} -> (?P<id>[^/]+)
         $pattern = preg_replace('#\{([a-zA-Z_]+)\}#', '(?P<$1>[^/]+)', $path);
 
         $this->routes[] = [
@@ -40,6 +45,16 @@ class Router
 
     public function dispatch(Request $request): void
     {
+        // Limite global: 60 requisições por minuto, por IP, em qualquer rota.
+        $rateLimitKey = 'global:' . $request->getClientIp();
+
+        if (!$this->rateLimiter->attempt($rateLimitKey, maxAttempts: 60, windowSeconds: 60)) {
+            http_response_code(429);
+            header('Content-Type: application/json; charset=utf-8');
+            echo json_encode(['error' => 'Muitas requisições. Tenta de novo em instantes.'], JSON_UNESCAPED_UNICODE);
+            return;
+        }
+
         foreach ($this->routes as $route) {
             if ($route['method'] !== $request->getMethod()) {
                 continue;
@@ -53,7 +68,7 @@ class Router
         }
 
         http_response_code(404);
-        header('Content-Type: application/json');
-        echo json_encode(['error' => 'Rota não encontrada']);
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode(['error' => 'Rota não encontrada'], JSON_UNESCAPED_UNICODE);
     }
 }
