@@ -88,7 +88,7 @@ $gameModeController = new GameModeController($gameModeRepository);
 $objectiveController = new ObjectiveController($objectiveRepository);
 $gameVersionController = new GameVersionController($gameVersionRepository);
 $stageController = new StageController($stageRepository, $paddleSkinRepository);
-$userController = new App\Controllers\UserController($userRepository, new LoginAttemptGuard());
+$userController = new UserController($userRepository, new LoginAttemptGuard());
 
 // ---- Rotas ----
 $router = new Router();
