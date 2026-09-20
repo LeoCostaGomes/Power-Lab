@@ -11,7 +11,7 @@ Esse projeto, trata-se de um TCC desenvolvido em conjunto à um grupo.
   ```json
   { "error": "Muitas requisições. Tenta de novo em instantes." }
   ```
-- **Autenticação**: rotas marcadas como "🔒 Autenticada" exigem o header abaixo, com um token obtido em `/login`:
+- **Autenticação**: rotas marcadas como "🔒 Autenticada" exigem o header abaixo, com um token obtido em `/users/login`:
   ```
   Authorization: Bearer <token>
   ```
@@ -37,14 +37,14 @@ Esse projeto, trata-se de um TCC desenvolvido em conjunto à um grupo.
 
 ---
 
-## Partículas (`/particle`)
+## Partículas (`/particles`)
 
 | Método | Rota | O que faz |
 |---|---|---|
-| GET | `/particle/get` | Lista todas as partículas. |
-| GET | `/particle/get/{id}` | Uma partícula específica. `404` se não existir. |
+| GET | `/particles/get` | Lista todas as partículas. |
+| GET | `/particles/get/{id}` | Uma partícula específica. `404` se não existir. |
 
-*(Controller feito por fora da conversa — confirma os campos exatos que ele devolve.)*
+*(Controller feito por fora da conversa em que essa documentação foi montada — confirma os campos exatos que ele devolve.)*
 
 ---
 
@@ -62,9 +62,9 @@ Esse projeto, trata-se de um TCC desenvolvido em conjunto à um grupo.
 | Método | Rota | O que faz |
 |---|---|---|
 | GET | `/paddles-skins/get` | Lista **todas** as combinações existentes: paddleId, skinId, sprite (o desenho daquela skin naquela raquete). |
-| GET | `/paddles-skins/get/{paddleId}/{skinId}` | O sprite de uma combinação específica. `404` se essa raquete+skin não tiver sprite cadastrado. |
-| GET | `/paddle/{paddleId}/skins` | Todas as skins que existem pra uma raquete específica. Lista vazia (não `404`) se o id não existir ou se a raquete não tiver nenhuma skin ainda — ver ressalva abaixo. |
-| GET | `/skin/{skinId}/paddles` | O inverso: todas as raquetes que têm essa skin. Mesma regra de lista vazia. |
+| GET | `/paddle/{paddleId}/skin/{skinId}/get` | O sprite de uma combinação específica. `404` se essa raquete+skin não tiver sprite cadastrado. |
+| GET | `/paddle/{paddleId}/skins/get` | Todas as skins que existem pra uma raquete específica. Lista vazia (não `404`) se o id não existir ou se a raquete não tiver nenhuma skin ainda — ver ressalva abaixo. |
+| GET | `/skin/{skinId}/paddles/get` | O inverso: todas as raquetes que têm essa skin. Mesma regra de lista vazia. |
 
 > **Nota**: as duas últimas rotas não diferenciam "ID inválido" de "sem resultados" — ambas devolvem `[]`. Isso foi uma decisão deliberada (são rotas de busca/filtro, não de "achar uma coisa específica"), não um bug.
 
@@ -79,15 +79,6 @@ Esse projeto, trata-se de um TCC desenvolvido em conjunto à um grupo.
 
 ---
 
-## Fases (`/stages`)
-
-| Método | Rota | O que faz |
-|---|---|---|
-| GET | `/stages/get` | Lista todas as fases, com raquete bot (+ descrição do estágio + skin aplicada), Ultimate bot, partícula bot, território, dificuldade, tipo de inimigo, objetivo (+ quantidade), recompensa (texto + quantidade + sprite) e os até 3 modificadores (`null` nos slots vazios). |
-| GET | `/stages/get/{id}` | Uma fase específica, mesmo formato. `404` se não existir. |
-
----
-
 ## Modificadores (`/modifiers`)
 
 | Método | Rota | O que faz |
@@ -97,15 +88,58 @@ Esse projeto, trata-se de um TCC desenvolvido em conjunto à um grupo.
 
 ---
 
-## Usuários (`/users`, `/login`)
+## Modos de jogo (`/gamemodes`)
+
+| Método | Rota | O que faz |
+|---|---|---|
+| GET | `/gamemodes/get` | Lista todos os modos de jogo — provavelmente id, name, description (colunas de `tb_game_mode`). |
+| GET | `/gamemodes/get/{id}` | Um modo de jogo específico. `404` se não existir. |
+
+*(Controller feito por fora da conversa em que essa documentação foi montada — nunca vi o `GameModeController`/`GameModeRepository` de verdade, confirma os campos exatos.)*
+
+---
+
+## Objetivos (`/objectives`)
+
+| Método | Rota | O que faz |
+|---|---|---|
+| GET | `/objectives/get` | Lista todos os objetivos: id, name, description. |
+| GET | `/objectives/get/{id}` | Um objetivo específico. `404` se não existir. |
+
+*(O `ObjectiveRepository` foi feito junto com o `StageRepository`, mas o `ObjectiveController` que expõe essa rota direto foi feito por fora — confirma o formato exato da resposta.)*
+
+---
+
+## Versões do jogo (`/gameversions`)
+
+| Método | Rota | O que faz |
+|---|---|---|
+| GET | `/gameversions/get` | Lista todas as versões — provavelmente id, versionCode, versionLog (colunas de `tb_game_version`). |
+| GET | `/gameversions/get/{id}` | Uma versão específica. `404` se não existir. |
+
+*(Controller feito por fora da conversa em que essa documentação foi montada — confirma os campos exatos.)*
+
+---
+
+## Fases (`/stages`)
+
+| Método | Rota | O que faz |
+|---|---|---|
+| GET | `/stages/get` | Lista todas as fases, com raquete bot (+ descrição do estágio + skin aplicada), Ultimate bot, partícula bot, território, dificuldade, tipo de inimigo, objetivo (+ quantidade), recompensa (texto + quantidade + sprite) e os até 3 modificadores (`null` nos slots vazios). |
+| GET | `/stages/get/{id}` | Uma fase específica, mesmo formato. `404` se não existir. |
+
+---
+
+## Usuários (`/users`)
 
 | Método | Rota | Auth | O que faz |
 |---|---|---|---|
+| ~~GET~~ | ~~`/users/get`~~ | — | **Desativada** (comentada no `bootstrap.php`) — listar todos os usuários não está disponível no momento. |
 | GET | `/users/get/{id}` | 🔒 Sim | Um usuário específico, **só** id, name, email (nunca senha ou IP). `401` se o token não for desse mesmo `id`; `404` se o id não existir. |
 | POST | `/users/post` | Não | Cria um usuário. Corpo: `{name, email, password}` (IP é pego automaticamente do `REMOTE_ADDR`, não vem no corpo). `400` se faltar campo; `409` se o email já existir. |
 | PUT | `/users/put/{id}` | 🔒 Sim | Atualiza **parcialmente** — só os campos enviados no corpo mudam, o resto continua igual. `401`/`404` iguais ao GET; `409` se tentar trocar pra um email já usado. |
 | DELETE | `/users/delete/{id}` | 🔒 Sim | Exclui o usuário. `401`/`404` iguais aos de cima. |
-| POST | `/login` | Não | Corpo: `{email, password}`. Sucesso devolve `{token, user}`. `401` pra credencial errada. `429` se essa conta levou 10 tentativas erradas nos últimos 15 minutos (bloqueio por força bruta, independente do rate limit global). |
+| POST | `/users/login` | Não | Corpo: `{email, password}`. Sucesso devolve `{token, user}`. `401` pra credencial errada. `429` se essa conta levou 10 tentativas erradas nos últimos 15 minutos (bloqueio por força bruta, independente do rate limit global). |
 
 ---
 
