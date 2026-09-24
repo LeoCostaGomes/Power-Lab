@@ -12,6 +12,7 @@ use App\Controllers\SkinController;
 use App\Controllers\StageController;
 use App\Controllers\UltimateController;
 use App\Controllers\UserController;
+use App\Core\LoginAttemptGuard;
 use App\Repositories\TerritoryRepository;
 use App\Repositories\PaddleRepository;
 use App\Repositories\UltimateRepository;
@@ -87,7 +88,7 @@ $gameModeController = new GameModeController($gameModeRepository);
 $objectiveController = new ObjectiveController($objectiveRepository);
 $gameVersionController = new GameVersionController($gameVersionRepository);
 $stageController = new StageController($stageRepository, $paddleSkinRepository);
-$userController = new UserController($userRepository);
+$userController = new UserController($userRepository, new LoginAttemptGuard());
 
 // ---- Rotas ----
 $router = new Router();
@@ -127,7 +128,7 @@ $router->get('/gameversions/get/{id}', [$gameVersionController, 'getById']);
 $router->get('/stages/get', [$stageController, 'getAll']);
 $router->get('/stages/get/{id}', [$stageController, 'getById']);
 
-$router->get('/users/get', [$userController, 'getAll']);
+//$router->get('/users/get', [$userController, 'getAll']);
 $router->get('/users/get/{id}', [$userController, 'getById']);
 $router->post('/users/post', [$userController, 'create']);
 $router->put('/users/put/{id}', [$userController, 'update']);

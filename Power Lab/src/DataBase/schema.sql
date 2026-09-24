@@ -298,6 +298,14 @@ CREATE TABLE `tb_user` (
   `fk_id_item_poll` int(11) NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE `tb_rate_limit` (
+  `rate_key` VARCHAR(255) NOT NULL,
+  `attempts` INT(11) NOT NULL DEFAULT 0,
+  `window_start` DATETIME NOT NULL,
+  `blocked_until` DATETIME NULL,
+  PRIMARY KEY (`rate_key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 --
 -- Indexes for dumped tables
 --
