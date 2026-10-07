@@ -11,21 +11,35 @@ class Request
     private string $clientIp;
 
     public function __construct()
-    {
-        $this->method = $_SERVER['REQUEST_METHOD'];
+{
+    $this->method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 
-        $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
-        $uri = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+    $uri = urldecode(parse_url(
+        $_SERVER['REQUEST_URI'] ?? '/',
+        PHP_URL_PATH
+    ));
 
-        if ($scriptDir !== '/' && str_starts_with($uri, $scriptDir)) {
-            $uri = substr($uri, strlen($scriptDir));
-        }
+    $scriptName = str_replace('\\', '/', $_SERVER['SCRIPT_NAME'] ?? '');
+    $scriptDir = str_replace('\\', '/', dirname($scriptName));
 
-        $this->path = '/' . trim($uri, '/');
-        $this->queryParams = $_GET;
-        $this->body = json_decode(file_get_contents('php://input'), true) ?? [];
-        $this->clientIp = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+    // Remove o diretório base da aplicação da URI.
+    if (
+        $scriptDir !== '/' &&
+        strncasecmp($uri, $scriptDir, strlen($scriptDir)) === 0
+    ) {
+        $uri = substr($uri, strlen($scriptDir));
     }
+
+    $this->path = '/' . trim($uri, '/');
+
+    $this->queryParams = $_GET;
+    $this->body = json_decode(
+        file_get_contents('php://input'),
+        true
+    ) ?? [];
+
+    $this->clientIp = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+}
 
     public function getMethod(): string
     {
