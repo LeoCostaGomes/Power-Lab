@@ -1,5 +1,4 @@
 <?php
-
 use App\Controllers\BoxTypeController;
 use App\Controllers\GameModeController;
 use App\Controllers\GameVersionController;
