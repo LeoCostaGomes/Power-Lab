@@ -133,3 +133,139 @@ INSERT INTO tb_stage (
 
 -- Fase 20
 (1, 6, 7, 1, 'A Última Balada', 1, NULL, NULL, 2, 'Box/2', 1, 3, 10, 2, 3, 1);
+
+INSERT INTO tb_game_version (version_code, version_log) VALUES
+(
+    '0.02',
+    'Lançada para: Windows e Mac (via arquivo .zip de 36 MB)
+Principais novidades:
+- Correções de bugs
+- Novo botão de sair na tela inicial
+- Mudança na forma de carregamento das ultimates
+- Adicionada mecânica de aumento de velocidade da bola com o tempo
+- Aumentada a velocidade de todas as raquetes
+- Diversas mudanças de balanceamento nas raquetes'
+),
+(
+    '0.03',
+    'Lançada para: Windows (37 MB) e Mac (45 MB)
+Principais novidades dessa nova versão de testes:
+- Novo sistema de Skins
+- Novo sistema de Partículas
+- Novo mapa do jogo disponível
+- Melhorias na tela de seleção
+- Diversas mudanças visuais no jogo
+- Correções de bugs
+*Aviso do desenvolvedor: versão para Mac não foi testada na prática.*'
+),
+(
+    '0.1.0',
+    'Lançada para: Windows (39 MB) e Mobile/Android (APK 37 MB)
+Principais novidades:
+- Correções de bugs
+- Novas habilidades passivas para as raquetes
+- Novas raquetes
+- Novas Ultimates
+- Agora não é mais possível marcar gol com crítico ou ultra crítico
+- Novas versão mobile
+- Diversas mudanças de balanceamento
+- E muito mais!!!'
+),
+(
+    '0.1.2',
+    'Lançada para: Windows (39 MB) e Mobile/Android (APK 37 MB)
+Principais novidades:
+- Correções de bugs
+- Nova tela de seleção de modos de jogo
+- Agora o botão de "escolher raquete" tem um função
+- Novo modo PvE (contra bot)
+- Diversas novidades de customização de partida
+- Diversas mudanças de balanceamento
+- Adicionado um EasterEgg no jogo
+- E muito mais!!!'
+),
+(
+    '0.1.3',
+    'Lançada para: Windows (39 MB) e Mobile/Android (APK 37 MB)
+Principais novidades dessa nova versão de testes:
+- Correções de bugs
+- mudança no sistema dos bots
+- mudanças de balanceamento
+- e muito mais
+
+Mudanças de balanceamento (equilíbrio do jogo):
+Buffs (melhorias):
+- Raquete quadrada: tamanho máximo da raquete 3 -> 3.5
+Nerfs (piorias):
+- Inversão Gravitacional (Ultimate): recarga 16 acertos -> 18 acertos
+- Raquete Temporal:
+  velocidade de movimente 7.5 -> 6.5
+  redução/aumento de velocidade da bola pela habilidade passiva 40% -> 30%
+- Raquete Invocadora: adicionado novo limite de pedras que podem aparecer em campo, agora são no máximo 3 pedras'
+),
+(
+    '0.1.4',
+    'Lançada para: Windows (39 MB) e Mobile/Android (APK 44 MB)
+Principais novidades:
+- Correções de bugs
+- Nova tela de configurações adicionada (com opções de modificar volume da musica do jogo, dos efeitos sonoros e mudar de idioma)
+- Novo sistema de idiomas adicionado (idiomas adicionados: português, inglês, espanhol, francês, alemão, japonês e coreano)
+- os bots de níveis mais baixos estão um pouco mais faceis
+- diversas mudança de balanceamento
+- E muito mais!!!'
+),
+(
+    '0.1.5',
+    'Lançada para: Windows (62 MB) e Mobile/Android (APK 68 MB)
+Principais novidades:
+- Correções de bugs
+- Novos sistema de modificaodres de partida adicionado com 7 modificadores disponiveis
+- Nova Pre-view do modo de jogo adicionada (em fase de testes)
+- Diversas mudança de balanceamento
+- E muito mais!!!
+
+Mudanças de balanceamento (equilíbrio do jogo):
+Nerfs (ficou mais fraco):
+Carga constante (ultimate): recarga 6 -> 8 acertos
+Outras mudanças:
+Raquete curva e magnética: Mudança na forma como funciona suas habilidades passivas'
+),
+(
+    '0.2.1',
+    'Lançada para: Mobile/Android (Oficial na Play Store)
+Principais mudanças da atualização:
+- Correção de bugs
+- Melhorias de experiencia de usuário
+- e muito mais!'
+),
+(
+    '0.2.2',
+    'Lançada para: Mobile/Android (Oficial na Play Store)
+Principais novidades:
+- Melhoria na movimentação do jogador
+- Retrabalho no Visual das raquetes
+- Retrabalho no sistema de IA do Bot
+
+Principais mudanças de balanceamento:
+Buffs (ficou mais forte):
+- Raquete Temporal - Velocidade de movimento aumentada:
+  estágio 1: 6 -> 6,5 de velocidade
+  estágio 2: 7 -> 7,5 de velocidade
+
+Nerfs (ficou mais fraco):
+- Carga Constante (Ultimate) - recarga 8 -> 9 acertos
+- Dado da Sorte (Ultimate) - recarga 18 -> 19 acertos
+- Inversão Gravitacional (Ultimate) - força da atração 12 -> 10'
+),
+(
+    '0.3.0',
+    'Lançada para: Mobile/Android (Oficial na Play Store)
+Principais novidades:
+- Adicionada uma nova tela de modos de jogo, que pode ser desbloqueada ao derrotar o chefão da fase 20.
+- Dois novos modos de jogo adicionados:
+  - 1 jogador
+  - 2 jogadores (no mesmo dispositivo)
+- Rebalanceamento de todas as fases do Power Pong.
+- Novas skins adicionadas.
+- Correções de bugs e muito mais!'
+);

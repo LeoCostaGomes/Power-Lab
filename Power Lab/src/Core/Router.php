@@ -61,7 +61,7 @@ class Router
             }
 
             if (preg_match($route['pattern'], $request->getPath(), $matches)) {
-                $params = array_filter($matches, fn ($key) => is_string($key), ARRAY_FILTER_USE_KEY);
+                $params = array_filter($matches, fn($key) => is_string($key), ARRAY_FILTER_USE_KEY);
                 call_user_func($route['handler'], $request, $params);
                 return;
             }
